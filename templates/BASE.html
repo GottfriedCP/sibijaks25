@@ -1,0 +1,108 @@
+{% load static django_bootstrap5 %}
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon' %}/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon' %}/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon' %}/favicon-16x16.png">
+    <link rel="manifest" href="{% static 'favicon' %}/site.webmanifest">
+    <link rel="mask-icon" href="{% static 'favicon' %}/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="{% static 'favicon' %}/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-config" content="{% static 'favicon' %}/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <!-- BS5 datatables -->
+    <link href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" rel="stylesheet">
+    <!-- HTMX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/2.0.4/htmx.min.js" integrity="sha512-2kIcAizYXhIn8TzUvqzEDZNuDZ+aW7yE/+f1HJHXFjQcGNfv1kqzJSTBRBSlOgp6B/KZsz1K0a3ZTqP9dnxioQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Summernote -->
+    {% include '_summernote.html' %}
+    <title>{% block title_bl %}{% endblock %} | SiBijaKs</title>
+    <!-- BS Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    {% bootstrap_css %}
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+        }
+
+        .btn-kemkes {
+            background-color: #16b3ac;
+        }
+
+        .a-kemkes {
+            color: #16b3ac;
+            text-decoration: none;
+        }
+
+        .hr-kemkes {
+            height:5px;
+            width: 25vw;
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            margin-left: auto;
+            margin-right: auto;
+            /* border-width:0; */
+            color:#16b3ac;
+            background-color:#16b3ac
+        }
+
+        .nav-item a.active {
+            border-bottom: 2px solid #16b3ac;
+        }
+
+        .card-title {
+            font-size: 80%;
+        }
+
+        div.div-table {
+            overflow-x: auto;
+        }
+
+        ol.breadcrumb a {
+            color: #16b3ac;
+        }
+    </style>
+    {% block header_bl %}{% endblock %}
+</head>
+
+<body>
+    {% if not hide_navbar %}
+    {% include 'navbar.html' %}
+    {% endif %}
+    {% block body_bl %}{% endblock %}
+    {% if not hide_navbar %}
+    <footer style="margin-top: 3rem; margin-bottom: 1rem;">
+        <div class="text-center">
+            <small>
+                SiBijaKs Awards 2025<br>
+                &copy; {% now "Y" %} Badan Kebijakan Pembangunan Kesehatan<br>
+            </small>
+        </div>
+    </footer>
+    {% endif %}
+    {% bootstrap_javascript %}
+    <!-- JQuery UI dan localization datepicker -->
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <!-- jquery datatables -->
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+    {% block body_add_bl %}{% endblock %}
+</body>
+
+</html>

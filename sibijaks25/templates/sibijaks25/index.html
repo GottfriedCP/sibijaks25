@@ -1,0 +1,65 @@
+{% extends "BASE.html" %}
+{% load static %}
+
+{% block title_bl %}Beranda{% endblock %}
+
+{% block header_bl %}
+<style>
+    .timeline {
+        border-left: 1px solid #16b3ac;
+        position: relative;
+        list-style: none;
+    }
+
+    .timeline .timeline-item {
+        position: relative;
+    }
+
+    .timeline .timeline-item p {
+        color: #16b3ac;
+    }
+
+    .timeline .timeline-item:after {
+        position: absolute;
+        display: block;
+        top: 0;
+    }
+
+    .timeline .timeline-item:after {
+        background-color: #16b3ac;
+        left: -38px;
+        border-radius: 50%;
+        height: 11px;
+        width: 11px;
+        content: "";
+    }
+</style>
+{% endblock %}
+
+{% block body_bl %}
+{% include "sibijaks25/_carousel.html" %}
+<div class="container mt-4">
+    <!-- SOSIALISASI -->
+    {% include "sibijaks25/_sos.html" %}
+    <section>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-kemkes btn-lg disabled" role="button" target="_blank">
+                Registrasi Peserta<br>
+                <small>(Segera Hadir)</small>
+            </a>
+            <a class="btn btn-kemkes btn-lg disabled" role="button" target="_blank">
+                Buku Panduan Peserta<br>
+                <small>(Segera Hadir)</small>
+            </a>
+        </div>
+    </section>
+    <hr class="hr-kemkes">
+    <div class="my-5">
+        <h2 class="text-center">
+            Jadwal dan Tahapan<br>
+            <span class="fs-3">SiBijaKs Awards 2025</span>
+        </h2>
+        {% include "sibijaks25/_timeline.html" %}
+    </div>
+</div>
+{% endblock %}
