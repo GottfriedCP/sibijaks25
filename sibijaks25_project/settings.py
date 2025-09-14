@@ -90,14 +90,6 @@ DATABASES = {
         "HOST": "localhost",
         "PORT": "5432",
     },
-    "master": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME2"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASS"),
-        "HOST": "localhost",
-        "PORT": "5432",
-    },
 }
 
 ADMINS = [("Gottfried", "gottfriedcpn@gmail.com")]
