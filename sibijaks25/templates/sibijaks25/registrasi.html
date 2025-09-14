@@ -8,10 +8,16 @@
 
 {% block body_bl %}
 <div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:index' %}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Registrasi</li>
+        </ol>
+    </nav>
     <h1>Registrasi Peserta</h1>
     <div class="my-3">
         <div class="alert alert-info" role="alert">
-            Registrasi peserta cukup dilakukan oleh ketua tim.
+            <b>Registrasi peserta cukup dilakukan oleh ketua tim</b>
         </div>
         {% bootstrap_messages %}
         {% bootstrap_form_errors form %}
@@ -28,9 +34,24 @@
 
 {% block body_add_bl %}
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
+        $('#id_is_mahasiswa').change(function () {
+            if ($(this).is(':checked')) {
+                $('#id_mahasiswa').closest('div').show();
+                $('#id_mahasiswa').attr('required', true);
+                $('#id_pekerjaan').closest('div').hide();
+                $('#id_pekerjaan').attr('required', false);
+            } else {
+                $('#id_mahasiswa').closest('div').hide();
+                $('#id_mahasiswa').attr('required', false);
+                $('#id_pekerjaan').closest('div').show();
+                $('#id_pekerjaan').attr('required', true);
+            }
+        }).trigger('change');
+        $('#id_pasfoto').attr('required', true);
+
         $('label').css('font-weight', 'bold');
-        $('input, textarea, select').each(function() {
+        $('input, textarea, select').each(function () {
             $(this).attr('placeholder', '');
         });
     });

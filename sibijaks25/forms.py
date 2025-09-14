@@ -5,13 +5,23 @@ from .models import Peserta, Naskah, Kolaborator
 class PesertaForm(forms.ModelForm):
     class Meta:
         model = Peserta
-        fields = ["nama", "email", "nomor_wa", "institusi", "pekerjaan", "pendidikan"]
+        fields = [
+            "nama",
+            "email",
+            "nomor_wa",
+            "is_mahasiswa",
+            "mahasiswa",
+            "institusi",
+            "pekerjaan",
+            "pendidikan",
+            "pasfoto",
+        ]
 
 
 class NaskahForm(forms.ModelForm):
     class Meta:
         model = Naskah
-        fields = ["judul", "abstrak", "kolaborators"]
+        fields = ["judul", "jenis_naskah", "abstrak", "kolaborators"]
 
     def __init__(self, *args, peserta=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,4 +35,4 @@ class NaskahForm(forms.ModelForm):
 class KolaboratorForm(forms.ModelForm):
     class Meta:
         model = Kolaborator
-        fields = ["nama", "institusi"]
+        fields = ["nama", "nomor_wa", "email", "institusi"]

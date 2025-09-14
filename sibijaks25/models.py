@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
 import os
+import uuid
 
 
 def validate_pasfoto(image):
@@ -39,7 +40,13 @@ class Banner(TimestampedModel):
 
 
 class Peserta(TimestampedModel):
-    pendidikan_choices = [
+    MAHASISWA_CHOICES = {
+        "d3": "D3",
+        "s1": "D4 / S1",
+        "s2": "S2 / pasca sarjana",
+        "s3": "S3 / post doktoral",
+    }
+    PENDIDIKAN_CHOICES = [
         ("d3", "D3"),
         ("s1", "D4 / S1"),
         ("s2", "S2"),
@@ -60,16 +67,38 @@ class Peserta(TimestampedModel):
         # validators=[MinLengthValidator(5, message="Nomor WA minimal 5 karakter.")],
         help_text="Nomor WA nantinya akan digunakan untuk login ke situs web ini.",
     )
-    institusi = models.CharField(max_length=500)
-    # mahasiswa = models.BooleanField(verbose_name="Apakah Anda berstatus mahasiswa?", default=False)
+    is_mahasiswa = models.BooleanField(
+        verbose_name="Saya ingin mendaftar kompetisi ini sebagai mahasiswa",
+        default=False,
+    )
+    mahasiswa = models.CharField(
+        verbose_name="Mahasiswa jenjang",
+        choices=MAHASISWA_CHOICES,
+        max_length=3,
+        blank=True,
+        null=True,
+    )
+    institusi = models.CharField(
+        max_length=500,
+        help_text="Jika Anda mendaftar sebagai mahasiswa, tuliskan nama perguruan tinggi.",
+    )
     pekerjaan_ht = f'Jika Anda mahasiswa, isikan "Mahasiswa"'
     pekerjaan = models.CharField(
-        verbose_name="Profesi/Pekerjaan/Jabatan", help_text=pekerjaan_ht, max_length=255
+        verbose_name="Profesi/Pekerjaan/Jabatan",
+        # help_text=pekerjaan_ht,
+        max_length=255,
+        blank=True,
+        null=True,
     )
     pendidikan = models.CharField(
-        max_length=5, choices=pendidikan_choices, verbose_name="Pendidikan Terakhir"
+        max_length=5,
+        choices=PENDIDIKAN_CHOICES,
+        verbose_name="Pendidikan Terakhir",
+        blank=True,
+        null=True,
+        help_text="Kosongkan jika tidak relevan",
     )
-    pasfoto_ht = "Upload pasfoto formal dengan latar belakang merah, rasio 2x3, ukuran maksimal 2MB."
+    pasfoto_ht = "Upload pasfoto formal dengan latar belakang merah, rasio 2x3, ukuran maksimal 2 MB."
 
     pasfoto = models.ImageField(
         max_length=500,
@@ -92,7 +121,18 @@ class Kolaborator(TimestampedModel):
         max_length=500,
         help_text="Nama lengkap sesuai KTP atau identitas resmi lainnya.",
     )
-    institusi_ht = "Institusi harus berbeda dengan ketua tim / penulis utama."
+    email = models.EmailField(
+        blank=True,
+        null=True,
+    )
+    nomor_wa = models.CharField(
+        verbose_name="Nomor WA",
+        max_length=20,
+        # validators=[MinLengthValidator(5, message="Nomor WA minimal 5 karakter.")],
+        blank=True,
+        null=True,
+    )
+    institusi_ht = "Minimal satu kolaborator harus berasal dari institusi yang berbeda dengan ketua tim atau penulis utama."
     institusi = models.CharField(max_length=500, help_text=institusi_ht)
 
     def __str__(self):
@@ -100,9 +140,24 @@ class Kolaborator(TimestampedModel):
 
 
 class Naskah(TimestampedModel):
-    peserta = models.ForeignKey(Peserta, on_delete=models.CASCADE, related_name="naskahs")
+    JENIS_NASKAH_CHOICES = {
+        "art": "Artikel Ilmiah",
+        "pb": "Policy Brief",
+    }
+    peserta = models.ForeignKey(
+        Peserta, on_delete=models.CASCADE, related_name="naskahs"
+    )
     judul = models.CharField(max_length=500)
-    abstrak = models.TextField(verbose_name="Concept Proposal (Abstrak)", help_text="Maksimal 250 kata.")
+    jenis_naskah = models.CharField(
+        max_length=5,
+        choices=JENIS_NASKAH_CHOICES,
+        default="art",
+        verbose_name="Jenis Naskah",
+    )
+    abstrak = models.TextField(
+        verbose_name="Concept Proposal (Abstrak)",
+        help_text="Maksimal abstrak 400 kata (Policy Brief), atau 2 halaman A4 ukuran font 11 (Artikel Ilmiah).",
+    )
     naskah_ht = "Unggah naskah dalam format PDF, ukuran maksimal 20 MB."
     naskah = models.FileField(
         upload_to="naskah/",
@@ -111,7 +166,11 @@ class Naskah(TimestampedModel):
         blank=True,
         null=True,
     )
-    kolaborators = models.ManyToManyField(Kolaborator, verbose_name="Kolaborator", help_text="Minimal satu harus dipilih.")
+    kolaborators = models.ManyToManyField(
+        Kolaborator,
+        verbose_name="Kolaborator",
+        help_text="Minimal satu orang harus dipilih.",
+    )
     verified = models.BooleanField(default=False)
 
     def __str__(self):

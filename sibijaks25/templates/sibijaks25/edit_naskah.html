@@ -1,0 +1,52 @@
+{% extends 'BASE.html' %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Naskah{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Naskah</li>
+        </ol>
+    </nav>
+    <h1>Edit Naskah</h1>
+    <div class="my-3">
+        {% bootstrap_messages %}
+        {% bootstrap_form_errors form %}
+    </div>
+    <form method="POST" style="width: 600px; max-width: 90vw;">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="mt-4 d-grid gap-2">
+            <button class="btn btn-kemkes" type="submit">Simpan Naskah</button>
+        </div>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    $(document).ready(function() {
+        var summernoteOptions = {
+            tabsize: 2,
+            height: 120,
+            toolbar: [
+                // ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                // ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                // ['table', ['table']],
+                ['insert', ['link', ]],
+                // ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        };
+        $('#id_abstrak').summernote(summernoteOptions);
+
+        $('label').css('font-weight', 'bold');
+        $('input, textarea, select').each(function() {
+            $(this).attr('placeholder', '');
+        });
+    });
+</script>
+{% endblock %}

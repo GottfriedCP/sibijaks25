@@ -48,13 +48,17 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <div class="px-3">
+                                <div class="px-3 mx-3" style="border: 1px solid #e3f2fd;">
                                     {{ naskah.abstrak|safe }}
                                 </div>
                             </li>
                         </ul>
                     </td>
-                    <td>-</td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:edit_naskah' naskah.id %}">Edit</a>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -74,6 +78,8 @@
                 <tr>
                     <th>No.</th>
                     <th>Nama</th>
+                    <th>Nomor WA</th>
+                    <th>Email</th>
                     <th>Institusi</th>
                     <th>Tindakan</th>
                 </tr>
@@ -83,8 +89,14 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ kolaborator.nama }}</td>
+                    <td>{{ kolaborator.nomor_wa|default:'-' }}</td>
+                    <td>{{ kolaborator.email|default:'-' }}</td>
                     <td>{{ kolaborator.institusi }}</td>
-                    <td>-</td>
+                    <td>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:edit_kolaborator' kolaborator.id %}">Edit</a>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
