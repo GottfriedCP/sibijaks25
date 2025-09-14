@@ -10,4 +10,6 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("naskah/", views.naskah, name="naskah"),
     path("naskah-baru/", views.tambah_naskah, name="tambah_naskah"),
+    path("kolaborator/", views.kolaborator, name="kolaborator"),
+    path("kolaborator-baru/", views.tambah_kolaborator, name="tambah_kolaborator"),
 ]

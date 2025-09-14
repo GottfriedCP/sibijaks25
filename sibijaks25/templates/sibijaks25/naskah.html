@@ -5,6 +5,96 @@
 
 {% block body_bl %}
 <div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:index' %}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Naskah Saya</li>
+        </ol>
+    </nav>
     <h1>Daftar Naskah</h1>
+    <div class="my-3">
+        {% bootstrap_messages %}
+    </div>
+    <div class="my-3 d-flex flex-wrap gap-3">
+        {% if ada_kolaborator %}
+        <a class="btn btn-kemkes" href="{% url 'sibijaks25:tambah_naskah' %}">Naskah Baru</a>
+        {% else %}
+        <a class="btn btn-kemkes disabled">Naskah Baru</a>
+        {% endif %}
+        <a class="btn btn-kemkes" href="{% url 'sibijaks25:tambah_kolaborator' %}">Kolaborator Baru</a>
+    </div>
+    <div class="my-5">
+        <h2 class="fs-4">Naskah Terdaftar</h2>
+        {% if naskahs %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Tanggal</th>
+                    <th>Judul</th>
+                    <th>Abstrak</th>
+                    <th>Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for naskah in naskahs %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
+                    <td>{{ naskah.judul }}</td>
+                    <td>
+                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Lihat
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="px-3">
+                                    {{ naskah.abstrak|safe }}
+                                </div>
+                            </li>
+                        </ul>
+                    </td>
+                    <td>-</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            Belum ada naskah terdaftar. Silakan daftarkan naskah terlebih dahulu.
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="my-3">
+        <h2 class="fs-4">Kolaborator Terdaftar</h2>
+        {% if kolaborators %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nama</th>
+                    <th>Institusi</th>
+                    <th>Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kolaborator in kolaborators %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ kolaborator.nama }}</td>
+                    <td>{{ kolaborator.institusi }}</td>
+                    <td>-</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            Belum ada kolaborator terdaftar. Silakan daftarkan kolaborator terlebih dahulu.
+        </div>
+        {% endif %}
+
+    </div>
 </div>
 {% endblock %}

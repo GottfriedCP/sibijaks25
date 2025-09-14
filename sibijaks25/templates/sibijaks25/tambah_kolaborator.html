@@ -1,0 +1,33 @@
+{% extends 'BASE.html' %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Kolaborator{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Daftarkan Kolaborator</li>
+        </ol>
+    </nav>
+    <h1>Daftarkan Kolaborator (Anggota Tim)</h1>
+    <form method="POST" style="width: 600px; max-width: 90vw;">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="mt-4 d-grid gap-2">
+            <button class="btn btn-kemkes" type="submit">Daftarkan Kolaborator</button>
+        </div>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    $(document).ready(function() {
+        $('label').css('font-weight', 'bold');
+        $('input, textarea, select').each(function() {
+            $(this).attr('placeholder', '');
+        });
+    });
+</script>
+{% endblock %}

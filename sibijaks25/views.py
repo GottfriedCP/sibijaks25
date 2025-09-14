@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from .forms import PesertaForm
+from .forms import PesertaForm, NaskahForm, KolaboratorForm
 from .models import Banner, Peserta
 
 
@@ -32,12 +32,48 @@ def registrasi(request):
 
 @login_required
 def naskah(request):
-    return render(request, "sibijaks25/naskah.html")
+    wa = request.session.get("peserta", {}).get("nomor_wa")
+    email = request.session.get("peserta", {}).get("email")
+    peserta = Peserta.objects.prefetch_related("kolaborators", "naskahs").get(
+        nomor_wa=wa, email=email
+    )
+    jumlah_kolaborator = peserta.kolaborators.count()
+    ada_kolaborator = jumlah_kolaborator > 0
+    if not ada_kolaborator:
+        messages.warning(
+            request,
+            "Anda belum menambahkan kolaborator. Silakan tambahkan kolaborator terlebih dahulu (minimal 1 orang).",
+        )
+    naskahs = peserta.naskahs.all()
+    context = {
+        "ada_kolaborator": ada_kolaborator,
+        "kolaborators": peserta.kolaborators.all(),
+        "naskahs": naskahs,
+    }
+    return render(request, "sibijaks25/naskah.html", context)
 
 
 @login_required
 def tambah_naskah(request):
-    pass
+    wa = request.session.get("peserta", {}).get("nomor_wa")
+    email = request.session.get("peserta", {}).get("email")
+    peserta = Peserta.objects.get(nomor_wa=wa, email=email)
+    form = NaskahForm(peserta=peserta)
+    if request.method == "POST":
+        form = NaskahForm(request.POST, request.FILES, peserta=peserta)
+        if form.is_valid():
+            naskah = form.save(commit=False)
+            naskah.peserta = peserta
+            naskah.save()
+            form.save_m2m()
+            messages.success(request, "Naskah berhasil didaftarkan.")
+            return redirect("sibijaks25:naskah")
+        else:
+            messages.error(request, "Terjadi kesalahan pengisian form.")
+    context = {
+        "form": form,
+    }
+    return render(request, "sibijaks25/tambah_naskah.html", context)
 
 
 @login_required
@@ -47,7 +83,25 @@ def kolaborator(request):
 
 @login_required
 def tambah_kolaborator(request):
-    pass
+    form = KolaboratorForm()
+    if request.method == "POST":
+        form = KolaboratorForm(request.POST)
+        if form.is_valid():
+            wa = request.session.get("peserta", {}).get("nomor_wa")
+            email = request.session.get("peserta", {}).get("email")
+            peserta = Peserta.objects.get(nomor_wa=wa, email=email)
+            kolaborator = form.save(commit=False)
+            kolaborator.peserta = peserta
+            kolaborator.save()
+            messages.success(request, "Kolaborator berhasil ditambahkan.")
+            return redirect("sibijaks25:naskah")
+        else:
+            messages.error(request, "Terjadi kesalahan pengisian form.")
+
+    context = {
+        "form": form,
+    }
+    return render(request, "sibijaks25/tambah_kolaborator.html", context)
 
 
 def login_view(request):

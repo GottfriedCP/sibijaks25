@@ -100,9 +100,9 @@ class Kolaborator(TimestampedModel):
 
 
 class Naskah(TimestampedModel):
-    peserta = models.ForeignKey(Peserta, on_delete=models.CASCADE)
+    peserta = models.ForeignKey(Peserta, on_delete=models.CASCADE, related_name="naskahs")
     judul = models.CharField(max_length=500)
-    abstrak = models.TextField()
+    abstrak = models.TextField(verbose_name="Concept Proposal (Abstrak)", help_text="Maksimal 250 kata.")
     naskah_ht = "Unggah naskah dalam format PDF, ukuran maksimal 20 MB."
     naskah = models.FileField(
         upload_to="naskah/",
@@ -111,7 +111,7 @@ class Naskah(TimestampedModel):
         blank=True,
         null=True,
     )
-    kolaborators = models.ManyToManyField(Kolaborator)
+    kolaborators = models.ManyToManyField(Kolaborator, verbose_name="Kolaborator", help_text="Minimal satu harus dipilih.")
     verified = models.BooleanField(default=False)
 
     def __str__(self):
