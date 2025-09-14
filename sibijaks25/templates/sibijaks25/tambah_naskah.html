@@ -16,11 +16,33 @@
         {% bootstrap_messages %}
         {% bootstrap_form_errors form %}
     </div>
-    <form method="POST" style="width: 600px; max-width: 90vw;">
+    <form method="POST">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        <div class="mt-4 d-grid gap-2">
-            <button class="btn btn-kemkes" type="submit">Daftarkan Naskah</button>
+        <div class="my-4">
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="c1" required>
+                <label class="form-check-label" for="c1">
+                    Saya telah membaca panduan artikel ilmiah dan/atau policy brief untuk SiBijaKs Awards 2025.
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="c2" required>
+                <label class="form-check-label" for="c2">
+                    Saya menyatakan bahwa naskah yang saya daftarkan sesuai dengan panduan tersebut.
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="c3" required>
+                <label class="form-check-label" for="c3">
+                    Jika naskah saya tidak sesuai dengan panduan, panitia berhak mendiskualifikasi naskah saya ini.
+                </label>
+            </div>
+        </div>
+        <div style="width: 800px; max-width: 90vw;">
+            {% bootstrap_form form %}
+            <div class="mt-4 d-grid gap-2">
+                <button class="btn btn-kemkes" type="submit">Daftarkan Naskah</button>
+            </div>
         </div>
 </div>
 {% endblock %}
