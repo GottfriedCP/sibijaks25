@@ -106,6 +106,22 @@ def tambah_naskah(request):
 
 
 @login_required
+def hapus_naskah(request, id):
+    if request.method == "POST":
+        wa = request.session.get("peserta", {}).get("nomor_wa")
+        email = request.session.get("peserta", {}).get("email")
+        peserta = Peserta.objects.get(nomor_wa=wa, email=email)
+        naskah = peserta.naskahs.filter(id=id).first()
+        if not naskah:
+            messages.error(request, "Naskah tidak ditemukan.")
+            return redirect("sibijaks25:naskah")
+        naskah.delete()
+        messages.success(request, "Naskah berhasil dihapus.")
+
+    return redirect("sibijaks25:naskah")
+
+
+@login_required
 def kolaborator(request):
     pass
 

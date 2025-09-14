@@ -16,9 +16,10 @@
             </ul>
             {% if request.user.is_authenticated %}
             <span>{{ request.session.peserta.email }}</span>
+            <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a>
             <form method="POST" action="{% url 'sibijaks25:logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="ms-3 btn btn-dark">Logout</button>
+                <button type="submit" class="btn btn-dark">Logout</button>
             </form>
             {% else %}
             <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:registrasi' %}">Registrasi</a>
