@@ -1,0 +1,38 @@
+{% extends "BASE.html" %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Beranda{% endblock %}
+
+{% block header_bl %}
+{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <h1>Registrasi Peserta</h1>
+    <div class="my-3">
+        <div class="alert alert-info" role="alert">
+            Registrasi peserta cukup dilakukan oleh ketua tim.
+        </div>
+        {% bootstrap_messages %}
+        {% bootstrap_form_errors form %}
+    </div>
+    <form method="POST" style="width: 600px; max-width: 90vw;">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="mt-4 d-grid gap-2">
+            <button class="btn btn-kemkes" type="submit">Registrasi</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    $(document).ready(function() {
+        $('label').css('font-weight', 'bold');
+        $('input, textarea, select').each(function() {
+            $(this).attr('placeholder', '');
+        });
+    });
+</script>
+{% endblock %}

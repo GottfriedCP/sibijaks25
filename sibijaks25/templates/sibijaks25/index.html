@@ -45,13 +45,14 @@
     {% endcomment %}
     <section>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/" role="button" target="_blank">
+                Buku Hasil SSGI 2024 Dalam Angka<br>
+            </a>
             <a class="btn btn-kemkes btn-lg disabled" role="button" target="_blank">
                 Registrasi Tim<br>
-                <small>(Segera Hadir)</small>
             </a>
             <a class="btn btn-kemkes btn-lg disabled" role="button" target="_blank">
                 Buku Panduan Tim<br>
-                <small>(Segera Hadir)</small>
             </a>
         </div>
     </section>
@@ -61,7 +62,12 @@
             Jadwal dan Tahapan<br>
             <span class="fs-3">SiBijaKs Awards 2025</span>
         </h2>
+        <div class="text-center mt-3">
+            <img style="width: 1000px; max-width: 90vw;" src="{% static 'img/tl.png' %}" class="">
+        </div>
+        {% comment %}
         {% include "sibijaks25/_timeline.html" %}
+        {% endcomment %}
     </div>
 </div>
 {% endblock %}
