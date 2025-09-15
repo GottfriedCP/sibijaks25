@@ -21,7 +21,7 @@ class PesertaForm(forms.ModelForm):
 class NaskahForm(forms.ModelForm):
     class Meta:
         model = Naskah
-        fields = ["judul", "jenis_naskah", "abstrak", "kolaborators"]
+        fields = ["judul", "jenis_naskah", "abstrak", "file_abstrak", "kolaborators"]
 
     def __init__(self, *args, peserta=None, **kwargs):
         super().__init__(*args, **kwargs)

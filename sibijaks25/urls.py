@@ -11,6 +11,7 @@ urlpatterns = [
     path("naskah/", views.naskah, name="naskah"),
     path("naskah/<int:id>/edit/", views.edit_naskah, name="edit_naskah"),
     path("naskah/<int:id>/hapus/", views.hapus_naskah, name="hapus_naskah"),
+    path("naskah/<int:id>/", views.detail_naskah, name="detail_naskah"),
     path("naskah-baru/", views.tambah_naskah, name="tambah_naskah"),
     path("kolaborator/", views.kolaborator, name="kolaborator"),
     path("kolaborator/<int:id>/edit/", views.edit_kolaborator, name="edit_kolaborator"),

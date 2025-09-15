@@ -16,24 +16,24 @@
         {% bootstrap_messages %}
         {% bootstrap_form_errors form %}
     </div>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="my-4">
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" value="" id="c1" required>
-                <label class="form-check-label" for="c1">
-                    Saya telah membaca panduan artikel ilmiah dan/atau policy brief untuk SiBijaKs Awards 2025.
+                <label id="lc1" class="form-check-label" for="c1">
+                    Saya telah membaca panduan <a href="https://docs.google.com/document/d/1Isorn4YEUXboUph9lF0lFuYtZtyeNcvE/edit?usp=drive_link&ouid=108559077645742686864&rtpof=true&sd=true" target="_blank">artikel ilmiah</a> dan <a href="https://docs.google.com/document/d/1dyOJs-WyYbX2SIOwf_jBsxPFMqXfOhtg/edit?usp=drive_link&ouid=108559077645742686864&rtpof=true&sd=true" target="_blank">policy brief</a> untuk SiBijaKs Awards 2025.
                 </label>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" value="" id="c2" required>
-                <label class="form-check-label" for="c2">
+                <label id="lc2" class="form-check-label" for="c2">
                     Saya menyatakan bahwa naskah yang saya daftarkan sesuai dengan panduan tersebut.
                 </label>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" value="" id="c3" required>
-                <label class="form-check-label" for="c3">
+                <label id="lc3" class="form-check-label" for="c3">
                     Jika naskah saya tidak sesuai dengan panduan, panitia berhak mendiskualifikasi naskah saya ini.
                 </label>
             </div>
@@ -52,7 +52,7 @@
     $(document).ready(function() {
         var summernoteOptions = {
             tabsize: 2,
-            height: 120,
+            height: 300,
             toolbar: [
                 // ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
@@ -64,8 +64,13 @@
             ]
         };
         $('#id_abstrak').summernote(summernoteOptions);
-
+        $('#id_file_abstrak').attr('required', true);
+        
+        $('#id_file_abstrak').attr('accept', 'application/pdf');
         $('label').css('font-weight', 'bold');
+        $('#lc1').css('font-weight', 'normal');
+        $('#lc2').css('font-weight', 'normal');
+        $('#lc3').css('font-weight', 'normal');
         $('input, textarea, select').each(function() {
             $(this).attr('placeholder', '');
         });

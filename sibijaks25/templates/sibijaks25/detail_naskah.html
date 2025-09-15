@@ -1,0 +1,53 @@
+{% extends "BASE.html" %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Beranda{% endblock %}
+
+{% block header_bl %}
+{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
+        </ol>
+    </nav>
+    <h1>Detail Naskah</h1>
+    <div class="my-3">
+        {% bootstrap_messages %}
+    </div>
+    <div>
+        <dl>
+            <dt>Judul</dt>
+            <dd>{{ naskah.judul }}</dd>
+            
+            <dt>Penulis Utama</dt>
+            <dd>{{ naskah.peserta }}</dd>
+
+            <dt>Kolaborator</dt>
+            <dd>
+                <ol>
+                    {% for k in naskah.kolaborators.all %}
+                    <li>{{ k }}</li>
+                    {% endfor %}
+                </ol>
+            </dd>
+            
+            <dt>Berkas PDF Abstrak</dt>
+            {% if naskah.file_abstrak %}
+            <dd>{{ naskah.file_abstrak.url }}</dd>
+            {% else %}
+            <dd>-</dd>
+            {% endif %}
+        </dl>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    
+</script>
+{% endblock %}

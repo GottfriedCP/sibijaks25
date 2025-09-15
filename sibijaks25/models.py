@@ -21,6 +21,18 @@ def validate_pasfoto(image):
             raise ValidationError("Pasfoto harus berupa file PNG atau JPEG.")
 
 
+def validate_abstrak_pdf(file):
+    if file.size > 5 * 1024 * 1024:
+        raise ValidationError("Ukuran file abstrak maksimal 5MB.")
+    if hasattr(file, "content_type"):
+        if file.content_type != "application/pdf":
+            raise ValidationError("File abstrak harus berupa PDF.")
+    else:
+        ext = os.path.splitext(file.name)[1].lower()
+        if ext != ".pdf":
+            raise ValidationError("File abstrak harus berupa PDF.")
+
+
 class TimestampedModel(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -157,6 +169,16 @@ class Naskah(TimestampedModel):
     abstrak = models.TextField(
         verbose_name="Concept Proposal (Abstrak)",
         help_text="Maksimal abstrak 400 kata (Policy Brief), atau 2 halaman A4 ukuran font 11 (Artikel Ilmiah).",
+    )
+    file_abstrak_ht = "Unggah file abstrak dalam format PDF, ukuran maksimal 5 MB."
+    file_abstrak = models.FileField(
+        verbose_name="File Concept Proposal (Abstrak)",
+        upload_to="abstrak/",
+        help_text=file_abstrak_ht,
+        max_length=500,
+        blank=True,
+        null=True,
+        validators=[validate_abstrak_pdf],
     )
     naskah_ht = "Unggah naskah dalam format PDF, ukuran maksimal 20 MB."
     naskah = models.FileField(

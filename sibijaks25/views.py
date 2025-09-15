@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import PesertaForm, NaskahForm, KolaboratorForm
 from .models import Banner, Peserta
 
@@ -119,6 +119,18 @@ def hapus_naskah(request, id):
         messages.success(request, "Naskah berhasil dihapus.")
 
     return redirect("sibijaks25:naskah")
+
+
+@login_required
+def detail_naskah(request, id):
+    wa = request.session.get("peserta", {}).get("nomor_wa")
+    email = request.session.get("peserta", {}).get("email")
+    peserta = Peserta.objects.get(nomor_wa=wa, email=email)
+    naskah = peserta.naskahs.filter(id=id).first()
+    context = {
+        "naskah": naskah,
+    }
+    return render(request, "sibijaks25/detail_naskah.html", context)
 
 
 @login_required
