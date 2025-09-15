@@ -26,6 +26,9 @@
             <dt>Penulis Utama</dt>
             <dd>{{ naskah.peserta }}</dd>
 
+            <dt>Jenis Naskah</dt>
+            <dd>{{ naskah.get_jenis_naskah_display }}</dd>
+
             <dt>Kolaborator</dt>
             <dd>
                 <ol>
@@ -35,13 +38,19 @@
                 </ol>
             </dd>
             
-            <dt>Berkas PDF Abstrak</dt>
+            <dt>File PDF Abstrak</dt>
             {% if naskah.file_abstrak %}
-            <dd>{{ naskah.file_abstrak.url }}</dd>
+            <dd>
+                <a class="btn btn-kemkes" href="{{ naskah.file_abstrak.url }}">Unduh Abstrak</a>
+            </dd>
             {% else %}
             <dd>-</dd>
             {% endif %}
         </dl>
+        <div class="mt-5">
+            <h3>Abstrak</h3>
+            <div>{{ naskah.abstrak|safe }}</div>
+        </div>
     </div>
 </div>
 {% endblock %}
