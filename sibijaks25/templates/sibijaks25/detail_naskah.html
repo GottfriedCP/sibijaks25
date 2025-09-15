@@ -38,17 +38,17 @@
                 </ol>
             </dd>
             
-            <dt>File PDF Abstrak</dt>
+            <dt>File PDF Konsep</dt>
             {% if naskah.file_abstrak %}
             <dd>
-                <a class="btn btn-kemkes" href="{{ naskah.file_abstrak.url }}">Unduh Abstrak</a>
+                <a class="btn btn-kemkes" href="{{ naskah.file_abstrak.url }}">Unduh Konsep</a>
             </dd>
             {% else %}
             <dd>-</dd>
             {% endif %}
         </dl>
         <div class="mt-5">
-            <h3>Abstrak</h3>
+            <h3>Konsep</h3>
             <div>{{ naskah.abstrak|safe }}</div>
         </div>
     </div>
