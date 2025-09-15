@@ -151,6 +151,14 @@ class Kolaborator(TimestampedModel):
         return f"{self.nama} - {self.institusi}"
 
 
+def konsep_dir_path(instance, filename):
+    return f"konsep/{instance.JENIS_NASKAH_CHOICES.get(instance.jenis_naskah)}_{instance.judul}.pdf"
+
+
+def naskah_dir_path(instance, filename):
+    return f"naskah/{instance.JENIS_NASKAH_CHOICES.get(instance.jenis_naskah)}_{instance.judul}.pdf"
+
+
 class Naskah(TimestampedModel):
     JENIS_NASKAH_CHOICES = {
         "art": "Artikel Ilmiah",
@@ -173,7 +181,7 @@ class Naskah(TimestampedModel):
     file_abstrak_ht = "Unggah file konsep dalam format PDF, ukuran maksimal 5 MB."
     file_abstrak = models.FileField(
         verbose_name="File Konsep",
-        upload_to="abstrak/",
+        upload_to=konsep_dir_path,
         help_text=file_abstrak_ht,
         max_length=500,
         blank=True,
@@ -182,7 +190,7 @@ class Naskah(TimestampedModel):
     )
     naskah_ht = "Unggah naskah dalam format PDF, ukuran maksimal 20 MB."
     naskah = models.FileField(
-        upload_to="naskah/",
+        upload_to=naskah_dir_path,
         help_text=naskah_ht,
         max_length=500,
         blank=True,
