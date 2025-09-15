@@ -167,12 +167,12 @@ class Naskah(TimestampedModel):
         verbose_name="Jenis Naskah",
     )
     abstrak = models.TextField(
-        verbose_name="Concept Proposal (Abstrak)",
-        help_text="Maksimal abstrak 400 kata (Policy Brief), atau 2 halaman A4 ukuran font 11 (Artikel Ilmiah).",
+        verbose_name="Konsep",
+        help_text="Maksimal konsep 400 kata (Policy Brief), atau 2 halaman A4 ukuran font 11 (Artikel Ilmiah).",
     )
-    file_abstrak_ht = "Unggah file abstrak dalam format PDF, ukuran maksimal 5 MB."
+    file_abstrak_ht = "Unggah file konsep dalam format PDF, ukuran maksimal 5 MB."
     file_abstrak = models.FileField(
-        verbose_name="File Concept Proposal (Abstrak)",
+        verbose_name="File Konsep",
         upload_to="abstrak/",
         help_text=file_abstrak_ht,
         max_length=500,
