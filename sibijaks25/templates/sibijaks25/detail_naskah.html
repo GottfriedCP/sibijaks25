@@ -31,11 +31,26 @@
 
             <dt>Kolaborator</dt>
             <dd>
-                <ol>
-                    {% for k in naskah.kolaborators.all %}
-                    <li>{{ k }}</li>
-                    {% endfor %}
-                </ol>
+                <table class="table table-sm my-3" style="width: 800px; max-width: 90vw;">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Institusi</th>
+                            <th>Pekerjaan</th>
+                            <th>Pendidikan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for k in naskah.kolaborators.all %}
+                        <tr>
+                            <td>{{ k.nama }}</td>
+                            <td>{{ k.institusi|default:'-' }}</td>
+                            <td>{{ k.pekerjaan|default:'-' }}</td>
+                            <td>{{ k.get_pendidikan_display|default:'-' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </dd>
             
             <dt>File PDF Konsep</dt>

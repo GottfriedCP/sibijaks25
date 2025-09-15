@@ -126,6 +126,7 @@ class Peserta(TimestampedModel):
 
 
 class Kolaborator(TimestampedModel):
+    PENDIDIKAN_CHOICES = Peserta.PENDIDIKAN_CHOICES
     peserta = models.ForeignKey(
         Peserta, on_delete=models.CASCADE, related_name="kolaborators"
     )
@@ -146,6 +147,21 @@ class Kolaborator(TimestampedModel):
     )
     institusi_ht = "Minimal satu kolaborator harus berasal dari institusi yang berbeda dengan ketua tim atau penulis utama."
     institusi = models.CharField(max_length=500, help_text=institusi_ht)
+    pendidikan = models.CharField(
+        max_length=5,
+        choices=PENDIDIKAN_CHOICES,
+        verbose_name="Pendidikan Terakhir",
+        blank=True,
+        null=True,
+        help_text="Kosongkan jika tidak relevan",
+    )
+    pekerjaan_ht = f'Jika mahasiswa, tuliskan "Mahasiswa"'
+    pekerjaan = models.CharField(
+        help_text=pekerjaan_ht,
+        max_length=255,
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return f"{self.nama} - {self.institusi}"
@@ -176,7 +192,7 @@ class Naskah(TimestampedModel):
     )
     abstrak = models.TextField(
         verbose_name="Konsep",
-        help_text="Maksimal konsep 400 kata (Policy Brief), atau 2 halaman A4 ukuran font 11 (Artikel Ilmiah).",
+        help_text="Maksimal konsep 400 kata (Policy Brief), 1150 kata (Artikel Ilmiah).",
     )
     file_abstrak_ht = "Unggah file konsep dalam format PDF, ukuran maksimal 5 MB."
     file_abstrak = models.FileField(

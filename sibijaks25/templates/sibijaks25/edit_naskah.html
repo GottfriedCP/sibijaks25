@@ -49,7 +49,42 @@
 
 {% block body_add_bl %}
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
+        // Batasi jumlah kata pada judul naskah
+        // Define the maximum number of words
+        const maxJudulWords = 26;
+
+        // Target the input field by its ID
+        $('#id_judul').on('input', function () {
+            let value = $(this).val();
+
+            // Use a regular expression to split by any whitespace and filter out empty strings
+            let words = value.split(/\s+/).filter(function (word) {
+                return word.length > 0;
+            });
+
+            // If the number of words exceeds the maximum
+            if (words.length > maxJudulWords) {
+                // Take the first `maxJudulWords` words and join them back with a single space
+                let trimmedValue = words.slice(0, maxJudulWords).join(' ');
+
+                // Set the input's value to the trimmed string
+                $(this).val(trimmedValue);
+            }
+        });
+
+        // Batasi jumlah kata pada abstrak tergantung jenis naskah
+        var maxwords = 401;
+        $('#id_jenis_naskah').on('change', function () {
+            if ($(this).val() === "pb") {
+                maxwords = 401;
+            } else {
+                maxwords = 1151;
+            }
+        });
+        if ($('#id_jenis_naskah').val() === "art") {
+            maxwords = 1151;
+        }
         var summernoteOptions = {
             tabsize: 2,
             height: 300,
@@ -59,9 +94,41 @@
                 // ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 // ['table', ['table']],
-                ['insert', ['link', ]],
+                // ['insert', ['link',]],
                 // ['view', ['fullscreen', 'codeview', 'help']]
-            ]
+            ],
+            callbacks: {
+                onKeydown: function (e) {
+                    var t = e.currentTarget.innerText;
+                    var words = t.split(" ");
+                    if (words.length >= maxwords) {
+                        //delete key
+                        if (e.keyCode !== 46 && e.keyCode !== 8)
+                            e.preventDefault();
+                        // add other keys ...
+                    }
+                },
+                onKeyup: function (e) {
+                    var t = e.currentTarget.innerText;
+                    var words = t.split(" ");
+                    if (words.length >= maxwords) {
+                        //delete key
+                        if (e.keyCode !== 46 && e.keyCode !== 8)
+                            e.preventDefault();
+                        // add other keys ...
+                    }
+                },
+                onPaste: function (e) {
+                    var t = e.currentTarget.innerText;
+                    var bufferText = ((e.originalEvent || e).clipboardData ||
+                        window.clipboardData).getData('Text');
+                    e.preventDefault();
+                    var all = t + bufferText;
+                    var words = all.split(" ");
+                    var array = words.slice(0, maxwords)
+                    document.execCommand('insertText', false, array.join(" "));
+                }
+            }
         };
         $('#id_abstrak').summernote(summernoteOptions);
         // $('#id_file_abstrak').attr('required', true);
@@ -72,7 +139,7 @@
         $('#lc1').css('font-weight', 'normal');
         $('#lc2').css('font-weight', 'normal');
         $('#lc3').css('font-weight', 'normal');
-        $('input, textarea, select').each(function() {
+        $('input, textarea, select').each(function () {
             $(this).attr('placeholder', '');
         });
     });

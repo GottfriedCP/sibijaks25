@@ -35,4 +35,4 @@ class NaskahForm(forms.ModelForm):
 class KolaboratorForm(forms.ModelForm):
     class Meta:
         model = Kolaborator
-        fields = ["nama", "nomor_wa", "email", "institusi"]
+        fields = ["nama", "nomor_wa", "email", "institusi", "pekerjaan", "pendidikan"]
