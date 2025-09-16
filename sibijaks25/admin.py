@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner, Naskah
+from .models import Banner, Peserta, Naskah
 
 
 @admin.register(Banner)
@@ -15,7 +15,7 @@ class NaskahAdmin(admin.ModelAdmin):
     ordering = ("-date_created",)
 
 
-@admin.register
+@admin.register(Peserta)
 class PesertaAdmin(admin.ModelAdmin):
     list_display = ("nama", "email", "nomor_wa", "institusi", "is_mahasiswa")
     search_fields = ("nama", "email", "nomor_wa", "institusi")
