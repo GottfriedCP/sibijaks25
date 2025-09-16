@@ -13,3 +13,11 @@ class NaskahAdmin(admin.ModelAdmin):
     search_fields = ("judul", "peserta__nama", "peserta__email")
     list_filter = ("jenis_naskah", "date_created")
     ordering = ("-date_created",)
+
+
+@admin.register
+class PesertaAdmin(admin.ModelAdmin):
+    list_display = ("nama", "email", "nomor_wa", "institusi", "is_mahasiswa")
+    search_fields = ("nama", "email", "nomor_wa", "institusi")
+    list_filter = ("is_mahasiswa", "pendidikan")
+    ordering = ("nama",)
