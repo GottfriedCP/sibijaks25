@@ -6,6 +6,10 @@ from .decorators import peserta_session_required, staff_required
 from .forms import PesertaForm, NaskahForm, KolaboratorForm
 from .models import Banner, Juri, Naskah, Peserta
 
+from environs import env
+
+env.read_env()
+
 
 @login_required
 @staff_required
@@ -51,7 +55,9 @@ def login_panitia_view(request):
             messages.error(request, "Nomor WA atau kata sandi salah.")
             return redirect("sibijaks25:login_panitia")
         # Simpan informasi peserta di session
-        user = authenticate(request, username="user", password="user")
+        user = authenticate(
+            request, username="panitia", password=env("PASSWORD_PANITIA")
+        )
         if user is not None:
             login(request, user)
             request.session["panitia"] = {
@@ -61,7 +67,7 @@ def login_panitia_view(request):
                 "nomor_wa": juri.nomor_wa,
             }
         else:
-            messages.error(request, "Base user belum dibuat.")
+            messages.error(request, "Base user panitia belum dibuat.")
             return redirect("sibijaks25:login_panitia")
         # Redirect ke halaman naskah versi panitia
         return redirect("sibijaks25:panitia_naskah")
