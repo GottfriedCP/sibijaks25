@@ -15,8 +15,12 @@
                 </li>
             </ul>
             {% if request.user.is_authenticated %}
+            {% if request.session.peserta %}
             <span>{{ request.session.peserta.email }}</span>
             <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a>
+            {% else %}
+            <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:panitia_naskah' %}">Naskah Tim</a>
+            {% endif %}
             <form method="POST" action="{% url 'sibijaks25:logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-dark">Logout</button>

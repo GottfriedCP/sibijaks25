@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner, Peserta, Naskah
+from .models import Banner, Juri, Peserta, Naskah
 
 
 @admin.register(Banner)
@@ -20,4 +20,11 @@ class PesertaAdmin(admin.ModelAdmin):
     list_display = ("nama", "email", "nomor_wa", "institusi", "is_mahasiswa")
     search_fields = ("nama", "email", "nomor_wa", "institusi")
     list_filter = ("is_mahasiswa", "pendidikan")
+    ordering = ("nama",)
+
+
+@admin.register(Juri)
+class JuriAdmin(admin.ModelAdmin):
+    list_display = ("nama", "email", "nomor_wa", "institusi")
+    search_fields = ("nama", "email", "nomor_wa", "institusi")
     ordering = ("nama",)

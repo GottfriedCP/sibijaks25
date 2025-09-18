@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from .decorators import peserta_session_required
 from .forms import PesertaForm, NaskahForm, KolaboratorForm
 from .models import Banner, Peserta
 
@@ -35,6 +36,7 @@ def registrasi(request):
 
 
 @login_required
+@peserta_session_required
 def naskah(request):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
@@ -58,6 +60,7 @@ def naskah(request):
 
 
 @login_required
+@peserta_session_required
 def edit_naskah(request, id):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
@@ -83,6 +86,7 @@ def edit_naskah(request, id):
 
 
 @login_required
+@peserta_session_required
 def tambah_naskah(request):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
@@ -106,6 +110,7 @@ def tambah_naskah(request):
 
 
 @login_required
+@peserta_session_required
 def hapus_naskah(request, id):
     if request.method == "POST":
         wa = request.session.get("peserta", {}).get("nomor_wa")
@@ -139,6 +144,7 @@ def kolaborator(request):
 
 
 @login_required
+@peserta_session_required
 def edit_kolaborator(request, id):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
@@ -164,6 +170,7 @@ def edit_kolaborator(request, id):
 
 
 @login_required
+@peserta_session_required
 def tambah_kolaborator(request):
     form = KolaboratorForm()
     if request.method == "POST":

@@ -10,7 +10,7 @@
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:panitia_naskah' %}">Naskah Saya</a></li>
             <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
         </ol>
     </nav>
@@ -20,14 +20,41 @@
         {% bootstrap_messages %}
     </div>
     <div>
+        <div class="row">
+            <div class="col-md-6">
+                <dl>
+                    <dt>Penulis Utama</dt>
+                    <dd>{{ naskah.peserta }}</dd>
+
+                    <dt>Institusi</dt>
+                    <dd>{{ naskah.peserta.institusi|default:'-' }}</dd>
+
+                    <dt>Pekerjaan/Profesi</dt>
+                    {% if naskah.peserta.is_mahasiswa %}
+                    <dd>Mahasiswa {{ naskah.peserta.get_mahasiswa_display|default:'-' }}</dd>
+                    {% else %}
+                    <dd>{{ naskah.peserta.pekerjaan|default:'-' }}</dd>
+                    {% endif %}
+
+                    <dt>Jenis Naskah</dt>
+                    <dd>{{ naskah.get_jenis_naskah_display }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl>
+                    <dt>Pasfoto</dt>
+                    <dd>
+                        {% if ada_pasfoto %}
+                        <img src="{{ naskah.peserta.pasfoto.url }}" style="width: 200px; height: auto;">
+                        {% else %}
+                        -
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+        </div>
         <dl>
-            <dt>Penulis Utama</dt>
-            <dd>{{ naskah.peserta }}</dd>
-
-            <dt>Jenis Naskah</dt>
-            <dd>{{ naskah.get_jenis_naskah_display }}</dd>
-
-            <dt>Kolaborator</dt>
+            <dt class="fs-3">Kolaborator</dt>
             <dd>
                 <table class="table table-sm my-3" style="width: 800px; max-width: 90vw;">
                     <thead>
@@ -53,10 +80,10 @@
                 </table>
             </dd>
             
-            <dt>File PDF Konsep</dt>
+            <dt class="mt-5">File PDF Konsep</dt>
             {% if naskah.file_abstrak %}
             <dd>
-                <a class="btn btn-kemkes" href="{{ naskah.file_abstrak.url }}">Unduh Konsep</a>
+                <a class="m-2 btn btn-kemkes btn-sm" href="{{ naskah.file_abstrak.url }}">Unduh Konsep</a>
             </dd>
             {% else %}
             <dd>-</dd>

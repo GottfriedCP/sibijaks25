@@ -1,7 +1,7 @@
 {% extends 'BASE.html' %}
 {% load static django_bootstrap5 %}
 
-{% block title_bl %}Login{% endblock %}
+{% block title_bl %}Login Panitia{% endblock %}
 
 {% block body_bl %}
 <div class="container" style="margin-top: 10vh;">
@@ -9,16 +9,12 @@
         <img src="{% static 'img/logo0.png' %}" width="80px">
     </div>
     <div class="d-flex justify-content-center my-3">
-        <h1 class="fs-2 text-center">Login Peserta (Tim)</h1>
+        <h1 class="fs-2 text-center">Login Panitia</h1>
     </div>
     <div class="d-flex justify-content-center my-3">
         <form method="POST" style="width: 300px; max-width: 80vw;">
             {% bootstrap_messages %}
             {% csrf_token %}
-            <div class="mb-3">
-                Anda juri/panitia? 
-                Silakan <a href="{% url 'sibijaks25:login_panitia' %}">login di sini</a>
-            </div>
             <div class="mb-3">
                 <label for="wa" class="form-label">Nomor WA</label>
                 <input type="text" class="form-control" name="wa" id="wa" required>

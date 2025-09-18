@@ -111,7 +111,6 @@ class Peserta(TimestampedModel):
         help_text="Kosongkan jika tidak relevan",
     )
     pasfoto_ht = "Upload pasfoto formal dengan latar belakang merah, rasio 2x3, ukuran maksimal 2 MB."
-
     pasfoto = models.ImageField(
         max_length=500,
         upload_to="pasfoto/",
@@ -120,6 +119,9 @@ class Peserta(TimestampedModel):
         help_text=pasfoto_ht,
         validators=[validate_pasfoto],
     )
+
+    class Meta:
+        verbose_name_plural = "Peserta"
 
     def __str__(self):
         return self.nama
@@ -176,9 +178,11 @@ def naskah_dir_path(instance, filename):
 
 
 class Naskah(TimestampedModel):
+    ARTIKEL_ILMIAH = "art"
+    POLICY_BRIEF = "pb"
     JENIS_NASKAH_CHOICES = {
-        "art": "Artikel Ilmiah",
-        "pb": "Policy Brief",
+        ARTIKEL_ILMIAH: "Artikel Ilmiah",
+        POLICY_BRIEF: "Policy Brief",
     }
     peserta = models.ForeignKey(
         Peserta, on_delete=models.CASCADE, related_name="naskahs"
@@ -219,5 +223,28 @@ class Naskah(TimestampedModel):
     )
     verified = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name_plural = "Naskah"
+
     def __str__(self):
         return f"{self.peserta.nama} - {self.judul}"
+
+
+class Juri(TimestampedModel):
+    nama = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    nomor_wa = models.CharField(
+        verbose_name="Nomor WA",
+        unique=True,
+        max_length=20,
+        # validators=[MinLengthValidator(5, message="Nomor WA minimal 5 karakter.")],
+    )
+    institusi = models.CharField(max_length=500, blank=True, null=True)
+    pekerjaan = models.CharField(max_length=255, blank=True, null=True)
+    is_panitia = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Juri"
+
+    def __str__(self):
+        return self.nama
