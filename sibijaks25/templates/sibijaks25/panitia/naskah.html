@@ -30,45 +30,47 @@
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
         {% if naskahs %}
-        <table id="datatable" class="table table-hover">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Tanggal</th>
-                    <th>Jenis Naskah</th>
-                    <th>Judul</th>
-                    <th>Ketua Tim</th>
-                    <th>Status</th>
-                    <th>Tindakan</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for naskah in naskahs %}
-                <tr>
-                    <td class="text-center">{{ forloop.counter }}</td>
-                    <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
-                    <td>{{ naskah.get_jenis_naskah_display }}</td>
-                    <td>{{ naskah.judul }}</td>
-                    <td>{{ naskah.peserta }}</td>
-                    <td>
-                        <span class="badge text-bg-success">Menunggu penilaian</span>
-                    </td>
-                    <td>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:panitia_detail_naskah' naskah.id %}">Lihat</a>
-                            {% comment %}
-                            <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:edit_naskah' naskah.id %}">Edit</a>
-                            <form method="POST" action="{% url 'sibijaks25:hapus_naskah' naskah.id %}" onsubmit="return confirm('Yakin ingin menghapus naskah ini?');">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
-                            {% endcomment %}
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="div-table overflow-x-auto">
+            <table id="datatable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Tanggal</th>
+                        <th>Jenis Naskah</th>
+                        <th>Judul</th>
+                        <th>Ketua Tim</th>
+                        <th>Status</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for naskah in naskahs %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
+                        <td>{{ naskah.get_jenis_naskah_display }}</td>
+                        <td>{{ naskah.judul }}</td>
+                        <td>{{ naskah.peserta }}</td>
+                        <td>
+                            <span class="badge text-bg-success">Menunggu penilaian</span>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:panitia_detail_naskah' naskah.id %}">Lihat</a>
+                                {% comment %}
+                                <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:edit_naskah' naskah.id %}">Edit</a>
+                                <form method="POST" action="{% url 'sibijaks25:hapus_naskah' naskah.id %}" onsubmit="return confirm('Yakin ingin menghapus naskah ini?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
+                                {% endcomment %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
         <div class="alert alert-info" role="alert">
             Belum ada naskah terdaftar
