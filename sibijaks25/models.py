@@ -51,6 +51,15 @@ class Banner(TimestampedModel):
         return self.judul
 
 
+class Countdown(TimestampedModel):
+    judul = models.CharField(max_length=255)
+    kode = models.TextField(help_text="Kode HTML/JS untuk countdown timer.")
+    aktif = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.judul
+
+
 class Peserta(TimestampedModel):
     MAHASISWA_CHOICES = {
         "d3": "D3",

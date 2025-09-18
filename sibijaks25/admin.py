@@ -1,10 +1,15 @@
 from django.contrib import admin
-from .models import Banner, Juri, Peserta, Naskah
+from .models import Banner, Countdown, Juri, Peserta, Naskah
 
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("judul", "aktif")
+
+
+@admin.register(Countdown)
+class CountdownAdmin(admin.ModelAdmin):
+    list_display = ("judul", "aktif")
 
 
 @admin.register(Naskah)

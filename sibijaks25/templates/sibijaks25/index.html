@@ -44,7 +44,7 @@
     {% include "sibijaks25/_sos.html" %}
     {% endcomment %}
     <section>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <div id="main-links" class="d-flex justify-content-center gap-3 flex-wrap">
             {% if not request.user.is_authenticated and not request.session.peserta %}
             <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:registrasi' %}" role="button">
                 Registrasi Tim<br>
@@ -64,6 +64,23 @@
             <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/" role="button" target="_blank">
                 Buku Hasil SSGI 2024 Dalam Angka<br>
             </a>
+        </div>
+    </section>
+    <!-- COUNTDOWN -->
+    {% if countdowns %}
+    <section class="my-5 text-center">
+        {% for c in countdowns %}
+        <div class="mb-4"><h2 class="fs-3">{{ c.judul|safe }}</h2></div>
+        <div class="mx-auto" style="width: 760px; max-width: 90vw;">
+            {{ c.kode|safe }}
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
+    <section class="my-5 text-center">
+        <div class="text-center fs-4">
+            Hingga saat ini, sudah {{ jumlah_tim_dengan_naskah }} tim yang mendaftar dan mengunggah naskah,<br>
+            dengan rincian {{ jumlah_naskah }} naskah ({{ jumlah_artikel }} artikel ilmiah dan {{ jumlah_pb }} policy brief).
         </div>
     </section>
     <hr class="hr-kemkes">

@@ -4,13 +4,27 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required
 from .forms import FotoPesertaForm, PesertaForm, NaskahForm, KolaboratorForm
-from .models import Banner, Peserta
+from .models import Banner, Countdown, Naskah, Peserta
 
 
 def index(request):
     banners = Banner.objects.filter(aktif=True).order_by("-date_created")
+    countdowns = Countdown.objects.filter(aktif=True).order_by("-date_created")
+    pesertas = Peserta.objects.all()
+    jumlah_tim = pesertas.count()
+    # hitung jumlah tim yang sudah submit minimal 1 naskah
+    jumlah_tim_dengan_naskah = pesertas.filter(naskahs__isnull=False).distinct().count()
+    naskahs = (
+        Naskah.objects.select_related("peserta").prefetch_related("kolaborators").all()
+    )
     context = {
         "banners": banners,
+        "countdowns": countdowns,
+        "jumlah_tim": jumlah_tim,
+        "jumlah_tim_dengan_naskah": jumlah_tim_dengan_naskah,
+        "jumlah_naskah": naskahs.count(),
+        "jumlah_artikel": naskahs.filter(jenis_naskah=Naskah.ARTIKEL_ILMIAH).count(),
+        "jumlah_pb": naskahs.filter(jenis_naskah=Naskah.POLICY_BRIEF).count(),
     }
     return render(request, "sibijaks25/index.html", context)
 
