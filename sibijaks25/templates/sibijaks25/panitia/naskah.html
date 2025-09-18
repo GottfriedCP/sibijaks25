@@ -18,6 +18,15 @@
     <div class="my-3 d-flex flex-wrap gap-3">
         
     </div>
+    <dl>
+        <b>Per {% now "d F Y" %}</b>
+        <dt>Jumlah tim terdaftar</dt>
+        <dd>{{ jumlah_tim }}</dd>
+        <dt>Jumlah tim sudah unggah naskah</dt>
+        <dd>{{ jumlah_tim_dengan_naskah }}</dd>
+        <dt>Jumlah naskah terdaftar</dt>
+        <dd>{{ jumlah_naskah }} ({{ jumlah_artikel }} Artikel Ilmiah + {{ jumlah_pb }} PB)</dd>
+    </dl>
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
         {% if naskahs %}
