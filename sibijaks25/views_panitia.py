@@ -18,7 +18,7 @@ def naskah(request):
     pesertas = Peserta.objects.all()
     jumlah_tim = pesertas.count()
     # hitung jumlah tim yang sudah submit minimal 1 naskah
-    jumlah_tim_dengan_naskah = pesertas.filter(naskahs__isnull=False).count()
+    jumlah_tim_dengan_naskah = pesertas.filter(naskahs__isnull=False).distinct().count()
     naskahs = (
         Naskah.objects.select_related("peserta").prefetch_related("kolaborators").all()
     )
