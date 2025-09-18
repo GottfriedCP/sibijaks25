@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required
-from .forms import PesertaForm, NaskahForm, KolaboratorForm
+from .forms import FotoPesertaForm, PesertaForm, NaskahForm, KolaboratorForm
 from .models import Banner, Peserta
 
 
@@ -37,6 +37,30 @@ def registrasi(request):
 
 @login_required
 @peserta_session_required
+def unggah_foto(request, peserta_id):
+    wa = request.session.get("peserta", {}).get("nomor_wa")
+    email = request.session.get("peserta", {}).get("email")
+    peserta = Peserta.objects.prefetch_related("kolaborators", "naskahs").get(
+        nomor_wa=wa, email=email
+    )
+    form = FotoPesertaForm(instance=peserta)
+    if request.method == "POST":
+        form = FotoPesertaForm(request.POST, request.FILES, instance=peserta)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Foto berhasil diunggah.")
+            return redirect("sibijaks25:naskah")
+        else:
+            messages.error(request, "Terjadi kesalahan pengisian form.")
+    context = {
+        "form": form,
+        "peserta": peserta,
+    }
+    return render(request, "sibijaks25/unggah_foto.html", context)
+
+
+@login_required
+@peserta_session_required
 def naskah(request):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
@@ -51,10 +75,13 @@ def naskah(request):
             "Anda belum menambahkan kolaborator. Silakan tambahkan kolaborator terlebih dahulu (minimal 1 orang).",
         )
     naskahs = peserta.naskahs.all()
+    ada_pasfoto = bool(getattr(peserta, "pasfoto", None))
     context = {
+        "peserta": peserta,
         "ada_kolaborator": ada_kolaborator,
         "kolaborators": peserta.kolaborators.all(),
         "naskahs": naskahs,
+        "ada_pasfoto": ada_pasfoto,
     }
     return render(request, "sibijaks25/naskah.html", context)
 
@@ -91,6 +118,20 @@ def tambah_naskah(request):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
     peserta = Peserta.objects.get(nomor_wa=wa, email=email)
+    # cek apa ada minimal 1 kolaborator dan pasfoto
+    if peserta.kolaborators.count() < 1:
+        messages.error(
+            request,
+            "Anda harus menambahkan minimal 1 kolaborator sebelum menambahkan naskah.",
+        )
+        return redirect("sibijaks25:naskah")
+    if not bool(getattr(peserta, "pasfoto", None)):
+        messages.error(
+            request,
+            "Anda harus mengunggah pasfoto sebelum menambahkan naskah.",
+        )
+        return redirect("sibijaks25:naskah")
+    
     form = NaskahForm(peserta=peserta)
     if request.method == "POST":
         form = NaskahForm(request.POST, request.FILES, peserta=peserta)

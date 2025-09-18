@@ -18,6 +18,12 @@ class PesertaForm(forms.ModelForm):
         ]
 
 
+class FotoPesertaForm(forms.ModelForm):
+    class Meta:
+        model = Peserta
+        fields = ["pasfoto"]
+
+
 class NaskahForm(forms.ModelForm):
     class Meta:
         model = Naskah

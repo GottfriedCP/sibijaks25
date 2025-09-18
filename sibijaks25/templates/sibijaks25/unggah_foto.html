@@ -1,0 +1,38 @@
+{% extends "BASE.html" %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Unggah Foto{% endblock %}
+
+{% block header_bl %}
+{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:index' %}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Registrasi</li>
+        </ol>
+    </nav>
+    <h1>Unggah Pasfoto Ketua Tim</h1>
+    <div class="my-3">
+        <div class="alert alert-warning" role="alert">
+            Upload pasfoto formal dengan latar belakang merah, rasio 2x3, ukuran maksimal 2 MB.
+        </div>
+        {% bootstrap_messages %}
+        {% bootstrap_form_errors form %}
+    </div>
+    <form method="POST" style="width: 600px; max-width: 90vw;" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <div class="mt-4 d-grid gap-2">
+            <button class="btn btn-kemkes" type="submit">Unggah Foto</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+</script>
+{% endblock %}

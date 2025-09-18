@@ -13,10 +13,44 @@
     </nav>
     <h1>Daftar Naskah</h1>
     <div class="my-3">
+        {% if not ada_pasfoto %}
+        <div class="alert alert-warning" role="alert">
+            Mohon unggah ulang pasfoto Anda 
+            <a href="{% url 'sibijaks25:unggah_foto' peserta.id %}">di sini</a>
+        </div>
+        {% endif %}
         {% bootstrap_messages %}
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <dl>
+                <dt>Penulis Utama</dt>
+                <dd>{{ peserta.nama }}</dd>
+
+                <dt>Institusi</dt>
+                <dd>{{ peserta.institusi|default:'-' }}</dd>
+
+                <dt>Pekerjaan/Profesi</dt>
+                {% if peserta.is_mahasiswa %}
+                <dd>Mahasiswa {{ peserta.get_mahasiswa_display|default:'-' }}</dd>
+                {% else %}
+                <dd>{{ peserta.pekerjaan|default:'-' }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl>
+                {% if ada_pasfoto %}
+                <dt>Pasfoto</dt>
+                <dd>
+                    <img src="{{ peserta.pasfoto.url }}" style="width: 128px; height: auto;">
+                </dd>
+                {% endif %}
+            </dl>
+        </div>
+    </div>
     <div class="my-3 d-flex flex-wrap gap-3">
-        {% if ada_kolaborator %}
+        {% if ada_kolaborator and ada_pasfoto %}
         <a class="btn btn-kemkes" href="{% url 'sibijaks25:tambah_naskah' %}">Naskah Baru</a>
         {% else %}
         <a class="btn btn-kemkes disabled">Naskah Baru</a>

@@ -45,14 +45,24 @@
     {% endcomment %}
     <section>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/" role="button" target="_blank">
-                Buku Hasil SSGI 2024 Dalam Angka<br>
-            </a>
-            <a class="btn btn-outline-success btn-lg" href="{% url 'sibijaks25:registrasi' %}" role="button" target="_blank">
+            {% if not request.user.is_authenticated and not request.session.peserta %}
+            <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:registrasi' %}" role="button">
                 Registrasi Tim<br>
             </a>
-            <a class="btn btn-outline-success btn-lg" href="https://drive.google.com/drive/folders/1o1LVPo5f9L5747zqeoW5BKqJWFKcHdts?usp=sharing" role="button" target="_blank">
+            {% elif request.user.is_authenticated and request.session.peserta %}
+            <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:naskah' %}" role="button">
+                Naskah Saya<br>
+            </a>
+            {% else %}
+            <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:panitia_naskah' %}" role="button">
+                Naskah Peserta<br>
+            </a>
+            {% endif %}
+            <a class="btn btn-kemkes btn-lg" href="https://drive.google.com/drive/folders/1o1LVPo5f9L5747zqeoW5BKqJWFKcHdts?usp=sharing" role="button" target="_blank">
                 Panduan dan Template Naskah<br>
+            </a>
+            <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/" role="button" target="_blank">
+                Buku Hasil SSGI 2024 Dalam Angka<br>
             </a>
         </div>
     </section>
