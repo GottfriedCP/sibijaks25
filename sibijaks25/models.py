@@ -187,6 +187,12 @@ def naskah_dir_path(instance, filename):
 
 
 class Naskah(TimestampedModel):
+    STATUS_NASKAH_CHOICES = [
+        (100, "Terunggah"),
+        (200, "Lolos Admin 1"),
+        (300, "Lolos Admin 2"),
+        (666, "Gugur"),
+    ]
     ARTIKEL_ILMIAH = "art"
     POLICY_BRIEF = "pb"
     JENIS_NASKAH_CHOICES = {
@@ -231,6 +237,19 @@ class Naskah(TimestampedModel):
         help_text="Minimal satu orang harus dipilih.",
     )
     verified = models.BooleanField(default=False)
+    verifier1 = models.CharField(max_length=255, blank=True, null=True)
+    verifier2 = models.CharField(max_length=255, blank=True, null=True)
+    status_naskah = models.IntegerField(
+        choices=STATUS_NASKAH_CHOICES, default=100, verbose_name="Status Naskah"
+    )
+    # Variabel skrining
+    s1 = models.BooleanField(default=False)
+    s2 = models.BooleanField(default=False)
+    s3 = models.BooleanField(default=False)
+    s4 = models.BooleanField(default=False)
+    s5 = models.BooleanField(default=False)
+    komentar1 = models.TextField(blank=True, null=True)
+    komentar2 = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Naskah"
@@ -240,6 +259,16 @@ class Naskah(TimestampedModel):
 
 
 class Juri(TimestampedModel):
+    """
+    - `is_panitia` adalah juri yang juga panitia.
+    - `is_supersubstansi` adalah juri substansi senior.
+    """
+
+    TAHAP_CHOICES = [
+        (1, "Tahap 1"),
+        (2, "Tahap 2"),
+        (3, "Tahap 3"),
+    ]
     nama = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     nomor_wa = models.CharField(
@@ -251,9 +280,35 @@ class Juri(TimestampedModel):
     institusi = models.CharField(max_length=500, blank=True, null=True)
     pekerjaan = models.CharField(max_length=255, blank=True, null=True)
     is_panitia = models.BooleanField(default=False)
+    is_supersubstansi = models.BooleanField(default=False)
+    tahap = models.IntegerField(choices=TAHAP_CHOICES, default=1)
 
     class Meta:
         verbose_name_plural = "Juri"
 
     def __str__(self):
         return self.nama
+
+
+class Review1(TimestampedModel):
+    """Review1 (Review 1) adalah skrining menuju reviewer."""
+
+    juri = models.ForeignKey(Juri, on_delete=models.CASCADE, related_name="reviews1")
+    naskah = models.ForeignKey(
+        Naskah, on_delete=models.CASCADE, related_name="reviews1"
+    )
+    s1 = models.BooleanField(default=False)
+    s2 = models.BooleanField(default=False)
+    s3 = models.BooleanField(default=False)
+    s4 = models.BooleanField(default=False)
+    s5 = models.BooleanField(default=False)
+    s6 = models.BooleanField(default=False)
+    komentar = models.TextField(blank=True, null=True)
+
+    class Meta:
+        unique_together = ("juri", "naskah")
+        verbose_name = "Review 1"
+        verbose_name_plural = "Review 1"
+
+    def __str__(self):
+        return f"Review {self.juri.nama} - {self.naskah.judul}"

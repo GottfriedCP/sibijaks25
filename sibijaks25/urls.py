@@ -17,8 +17,18 @@ urlpatterns = [
     path("kolaborator/<int:id>/edit/", views.edit_kolaborator, name="edit_kolaborator"),
     path("kolaborator-baru/", views.tambah_kolaborator, name="tambah_kolaborator"),
     path("unggah-foto/<int:peserta_id>/", views.unggah_foto, name="unggah_foto"),
-
-    path("panitia/naskah/<int:id>/", views_panitia.detail_naskah, name="panitia_detail_naskah"),
+    # PANITIA
+    path(
+        "panitia/naskah/<int:id>/",
+        views_panitia.detail_naskah,
+        name="panitia_detail_naskah",
+    ),
     path("panitia/naskah/", views_panitia.naskah, name="panitia_naskah"),
+    # simpan penilaian skrining naskah
+    path(
+        "panitia/simpan-penilaian/",
+        views_panitia.simpan_penilaian,
+        name="simpan_penilaian",
+    ),
     path("login-panitia/", views_panitia.login_panitia_view, name="login_panitia"),
 ]

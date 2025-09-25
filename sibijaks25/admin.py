@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner, Countdown, Juri, Peserta, Naskah
+from .models import Banner, Countdown, Juri, Peserta, Naskah, Review1
 
 
 @admin.register(Banner)
@@ -30,6 +30,33 @@ class PesertaAdmin(admin.ModelAdmin):
 
 @admin.register(Juri)
 class JuriAdmin(admin.ModelAdmin):
-    list_display = ("nama", "email", "nomor_wa", "institusi")
+    list_display = (
+        "nama",
+        "email",
+        "nomor_wa",
+        "institusi",
+        "is_panitia",
+        "is_supersubstansi",
+        "tahap",
+    )
     search_fields = ("nama", "email", "nomor_wa", "institusi")
+    list_filter = ("tahap",)
     ordering = ("nama",)
+
+
+@admin.register(Review1)
+class Review1Admin(admin.ModelAdmin):
+    list_display = (
+        "juri",
+        "naskah",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6",
+        "date_created",
+    )
+    search_fields = ("juri__nama", "naskah__judul", "naskah__peserta__nama")
+    list_filter = ("s1", "s2", "s3", "s4", "s5", "s6", "date_created")
+    ordering = ("-date_created",)

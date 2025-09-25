@@ -92,6 +92,90 @@
             <div>{{ naskah.abstrak|safe }}</div>
         </div>
     </div>
+    <div id="div-form-skrining">
+        {% if bisa_dinilai %}
+        <h2 class="fs-4 mt-5">Form Skrining</h2>
+        <form method="POST" action="{% url 'sibijaks25:simpan_penilaian' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id_naskah" value="{{ naskah.id }}">
+            <input type="hidden" name="id_juri" value="{{ juri.id }}">
+            {% if naskah.verifier1 %}
+            <input type="hidden" name="s1" value="{% if naskah.s1 %}1{% else %}0{% endif %}">
+            <input type="hidden" name="s2" value="{% if naskah.s2 %}1{% else %}0{% endif %}">
+            <input type="hidden" name="s3" value="{% if naskah.s3 %}1{% else %}0{% endif %}">
+            {% else %}
+            <div class="mb-3 p-3" style="border: 1px solid gray;">
+                <label for="s1" class="form-label">
+                    Kesesuaian institusi<br><small>Min 2 institusi yang berlainan</small> 
+                </label>
+                <select id="s1" name="s1" class="form-select" required>
+                    <option selected value="1">Sesuai</option>
+                    <option value="0">Tidak Sesuai</option>
+                </select>
+            </div>
+            <div class="mb-3 p-3" style="border: 1px solid gray;">
+                <label for="s2" class="form-label">
+                    Kesesuaian format<br>
+                    Artikel
+                    <ol>
+                        <li>Maksimal 2 halaman.</li>
+                        <li>Ukuran kertas A4, seluruh page margin 2 cm.</li>
+                        <li>Font arial 11 hitam, spasi “multiple at 1,15”</li>
+                    </ol>
+                    Policy Brief
+                    <ol>
+                        <li>Maksimal 400 kata.</li>
+                        <li>Ukuran kertas A4, seluruh margin 2 cm.</li>
+                        <li>Font arial 11 hitam, spasi “1,5”</li>
+                    </ol>
+                </label>
+                <select id="s2" name="s2" class="form-select" required>
+                    <option selected value="1">Sesuai</option>
+                    <option value="0">Tidak Sesuai</option>
+                </select>
+            </div>
+            <div class="mb-3 p-3" style="border: 1px solid gray;">
+                <label for="s3" class="form-label">
+                    Kesesuaian tema dengan SSGI
+                </label>
+                <select id="s3" name="s3" class="form-select" required>
+                    <option selected value="1">Sesuai</option>
+                    <option value="0">Tidak Sesuai</option>
+                </select>
+            </div>
+            {% endif %}
+            {% if is_supersubstansi %}
+            <div class="mb-3 p-3" style="border: 1px solid gray;">
+                <label for="s4" class="form-label">
+                    Kesesuaian dengan variabel SSGI
+                </label>
+                <select id="s4" name="s4" class="form-select" required>
+                    <option selected value="1">Sesuai</option>
+                    <option value="0">Tidak Sesuai</option>
+                </select>
+            </div>
+            <div class="mb-3 p-3" style="border: 3px solid gray;">
+                <label for="s5" class="form-label">
+                    Lanjut ke reviewer
+                </label>
+                <select id="s5" name="s5" class="form-select" required>
+                    <option selected value="1">Ya</option>
+                    <option value="0">Tidak</option>
+                </select>
+            </div>
+            {% endif %}
+            <div class="mb-3">
+                <label for="k" class="form-label">Komentar (opsional)</label>
+                <textarea class="form-control" name="k" id="k" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-kemkes">Simpan Penilaian</button>
+        </form>
+        {% else %}
+        <div class="alert alert-info">
+            Naskah ini sudah dinilai.
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
 

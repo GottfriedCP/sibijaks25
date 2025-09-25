@@ -19,6 +19,7 @@
             <span>{{ request.session.peserta.email }}</span>
             <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:naskah' %}">Naskah Saya</a>
             {% else %}
+            <span>{{ request.session.panitia.nama }}</span>
             <a class="btn btn-dark mx-3" href="{% url 'sibijaks25:panitia_naskah' %}">Naskah Peserta</a>
             {% endif %}
             <form method="POST" action="{% url 'sibijaks25:logout' %}">
