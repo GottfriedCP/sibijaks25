@@ -21,7 +21,7 @@
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Kata Sandi</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="text" class="form-control" id="email" name="email" required>
             </div>
             <div class="d-grid gap-2">
                 <button type="submit" class="my-3 btn btn-secondary btn-kemkes">Masuk</button>
@@ -29,4 +29,18 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    $(document).ready(function () {
+        $('.form-control').on('input', function () {
+            var val = $(this).val();
+            var trimmed = val.replace(/^\s+|\s+$/g, '');
+            if (val !== trimmed) {
+                $(this).val(trimmed);
+            }
+        });
+    });
+</script>
 {% endblock %}
