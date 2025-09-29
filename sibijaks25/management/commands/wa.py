@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         pesertas_belum_unggah = Peserta.objects.annotate(jml_naskah=Count("naskahs"))
-        pesertas_belum_unggah = pesertas_belum_unggah.filter(jml_naskah__lt=1)
+        pesertas_belum_unggah = pesertas_belum_unggah.filter(jml_naskah=0)
         if not pesertas_belum_unggah.exists():
             self.stdout.write(
                 self.style.SUCCESS("Semua peserta sudah mengunggah naskah.")
@@ -30,26 +30,30 @@ class Command(BaseCommand):
                 f"{pesertas_belum_unggah.count()} peserta belum mengunggah naskah."
             )
         )
-        return
+        # return
         contacts = []
         for p in pesertas_belum_unggah:
             contacts.append({"nama": p.nama, "nomor_wa": p.nomor_wa})
+        # For testing, use a fixed contact list
+        # contacts = [
+        #     {"nama": "Adi", "nomor_wa": "082213069594"},
+        # ]
         for c in contacts:
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
             message = f"""
-                *1 Hari Lagi Batas Waktu Unggah Naskah SiBijaKs Awards 2025*
+*1 Hari Lagi Batas Waktu Unggah Naskah SiBijaKs Awards 2025*
 
-                Selamat siang, Ibu/Bapak {c['nama']}.
+Selamat siang, Ibu/Bapak {c['nama']}.
 
-                Terima kasih sudah mendaftar untuk berpartisipasi dalam ajang SiBijaKs Awards 2025.
-                Tidak terasa batas akhir pengumpulan konsep naskah SiBijaks Awards 2025 tinggal 1 hari lagi.
-                Yuk, segera unggah konsep naskah terbaiknya sebelum tanggal 30 September 2025 pukul 23:59 WIB.
+Terima kasih sudah mendaftar untuk berpartisipasi dalam ajang SiBijaKs Awards 2025.
+Tidak terasa batas akhir pengumpulan konsep naskah SiBijaks Awards 2025 tinggal 1 hari lagi.
+Yuk, segera unggah konsep naskah terbaiknya sebelum tanggal 30 September 2025 pukul 23:59 WIB.
 
-                *Data SSGI 2024 Untuk Kebijakan Berkelanjutan*
-                ---
-                Salam sehat,
-                Panitia SiBijaKs Awards 2025"""
+*Data SSGI 2024 Untuk Kebijakan Berkelanjutan*
+---
+Salam sehat,
+Panitia SiBijaKs Awards 2025"""
 
             # Prepare the data payload for the API request
             payload = {
