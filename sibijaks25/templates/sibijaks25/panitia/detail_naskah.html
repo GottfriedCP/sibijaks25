@@ -193,6 +193,31 @@
                 {% endif %}
             {% endif %}
         </div>
+        <div id="div-juri-naskah">
+            <h3 class="fs-4">Daftar Reviewer</h3>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama Reviewer</th>
+                        <th>Institusi</th>
+                        <th>Profesi</th>
+                        <th>Jumlah Naskah Ditugaskan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r, jml_naskah in reviewers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ r }}</td>
+                        <td>{{ r.institusi|default:'-' }}</td>
+                        <td>{{ r.pekerjaan|default:'-' }}</td>
+                        <td>{{ jml_naskah }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
     </div>
 </div>

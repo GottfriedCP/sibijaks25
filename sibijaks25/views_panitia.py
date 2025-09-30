@@ -117,7 +117,15 @@ def detail_naskah(request, id):
     bisa_dinilai = not bool(naskah.verifier1)
     if juri.is_supersubstansi:
         bisa_dinilai = not bool(naskah.verifier2)
-    # TODO cek apa dia bisa assign juri untuk naskah ini (is_superuser atau is_panitia)
+    reviewers = (
+        Juri.objects.filter(is_panitia=False)
+        .prefetch_related("naskahs")
+        .order_by("nama")
+    )
+    reviewers_list = []
+    for r in reviewers:
+        jml_naskah = r.naskahs.count()
+        reviewers_list.append((r, jml_naskah))
     context = {
         "naskah": naskah,
         "juri": juri,
@@ -127,6 +135,7 @@ def detail_naskah(request, id):
         "form_juri": (
             NaskahJuriForm(instance=naskah) if juri.is_supersubstansi else None
         ),
+        "reviewers": reviewers_list,
     }
     return render(request, "sibijaks25/panitia/detail_naskah.html", context)
 

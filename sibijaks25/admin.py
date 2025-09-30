@@ -42,6 +42,15 @@ class JuriAdmin(admin.ModelAdmin):
     search_fields = ("nama", "email", "nomor_wa", "institusi")
     list_filter = ("tahap",)
     ordering = ("nama",)
+    actions = ["set_is_panitia_true", "set_is_panitia_false"]
+
+    @admin.action(description="Set selected as Panitia")
+    def set_is_panitia_true(self, request, queryset):
+        queryset.update(is_panitia=True)
+
+    @admin.action(description="Unset selected as Panitia")
+    def set_is_panitia_false(self, request, queryset):
+        queryset.update(is_panitia=False)
 
 
 @admin.register(Review1)
