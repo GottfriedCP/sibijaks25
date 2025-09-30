@@ -174,10 +174,10 @@
         </form>
         {% else %}
         <div class="alert alert-info">
-            Naskah ini sudah di-skrining (seleksi administrasi) oleh:
+            Naskah ini telah di-skrining (seleksi administrasi) oleh:
             <ol>
                 <li>{{ naskah.verifier1 }} (tahap I)</li>
-                <li>{{ naskah.verifier2 }} (tahap II)</li>
+                <li>{{ naskah.verifier2|default:'-' }} (tahap II)</li>
             </ol>
             {% if naskah.status_naskah == 666 %}
             <p class="mt-3">Naskah ini <b>tidak lolos</b> seleksi administrasi.</p>
@@ -188,7 +188,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="id_naskah" value="{{ naskah.id }}">
                     {% bootstrap_form form_juri %}
-                    <button type="submit" class="btn btn-kemkes">Simpan Juri</button>
+                    <button type="submit" class="btn btn-kemkes">Simpan Reviewer</button>
                 </form>
                 {% endif %}
             {% endif %}

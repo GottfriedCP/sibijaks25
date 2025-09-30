@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required
 from .forms import FotoPesertaForm, PesertaForm, NaskahForm, KolaboratorForm
+from .helpers import _cek_deadline
 from .models import Banner, Countdown, Naskah, Peserta
 
 
@@ -30,6 +31,7 @@ def index(request):
 
 
 def registrasi(request):
+    _cek_deadline()
     form = PesertaForm()
     if request.method == "POST":
         form = PesertaForm(request.POST, request.FILES)
@@ -129,6 +131,7 @@ def edit_naskah(request, id):
 @login_required
 @peserta_session_required
 def tambah_naskah(request):
+    _cek_deadline()
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
     peserta = Peserta.objects.get(nomor_wa=wa, email=email)
@@ -250,11 +253,11 @@ def tambah_kolaborator(request):
 
 def login_view(request):
     if request.method == "POST":
-        wa = request.POST.get("wa")
-        email = request.POST.get("email")
+        wa = str(request.POST.get("wa")).strip()
+        email = str(request.POST.get("email")).strip()
         peserta = Peserta.objects.filter(nomor_wa=wa, email=email).first()
         if not peserta:
-            messages.error(request, "Nomor WA atau kata sandi salah.")
+            messages.error(request, "Nomor WA atau email salah.")
             return redirect("sibijaks25:login")
         # Simpan informasi peserta di session
         user = authenticate(request, username="user", password="user")

@@ -254,7 +254,7 @@ class Naskah(TimestampedModel):
         "Juri",
         through="Review2",
         related_name="naskahs",
-        verbose_name="Juri Tahap Seleksi Konsep",
+        verbose_name="Reviewer",
         blank=True,
         # help_text='Juri yang melakukan review tahap 2 untuk naskah ini.',
     )
