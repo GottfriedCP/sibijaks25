@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required, staff_required
-from .forms import PesertaForm, NaskahForm, KolaboratorForm
+from .forms import NaskahJuriForm
 from .models import Banner, Juri, Naskah, Peserta, Review1
 
 from environs import env
@@ -28,7 +28,8 @@ def naskah(request):
         bisa_dinilai = not bool(n.verifier1)
         if juri.is_supersubstansi:
             bisa_dinilai = not bool(n.verifier2)
-        naskahs_list.append((n, bisa_dinilai))
+        jumlah_juri = n.juris.count()
+        naskahs_list.append((n, bisa_dinilai, jumlah_juri))
     context = {
         "jumlah_tim": jumlah_tim,
         "jumlah_tim_dengan_naskah": jumlah_tim_dengan_naskah,
@@ -62,7 +63,7 @@ def simpan_penilaian(request):
             if naskah.verifier2:
                 messages.error(
                     request,
-                    f"Naskah dengan ID {naskah.judul} baru saja dinilai oleh {naskah.verifier2}.",
+                    f"Naskah berjudul '{naskah.judul}' baru saja dinilai oleh {naskah.verifier2}.",
                 )
                 return redirect("sibijaks25:panitia_detail_naskah", id=naskah.id)
             naskah.verifier2 = juri.nama
@@ -70,7 +71,7 @@ def simpan_penilaian(request):
         else:
             if naskah.verifier1 or naskah.verifier2:
                 messages.error(
-                    request, f"Naskah dengan ID {naskah.judul} baru saja dinilai."
+                    request, f"Naskah berjudul '{naskah.judul}' baru saja dinilai."
                 )
                 return redirect("sibijaks25:panitia_detail_naskah", id=naskah.id)
             naskah.verifier1 = juri.nama
@@ -83,7 +84,28 @@ def simpan_penilaian(request):
             )
         naskah.save()
         messages.success(request, "Penilaian berhasil disimpan.")
+        return redirect("sibijaks25:panitia_naskah")
     return redirect("sibijaks25:panitia_detail_naskah", id=naskah.id)
+
+
+@login_required
+@staff_required
+def simpan_juri(request):
+    if request.method == "POST":
+        juri = get_object_or_404(Juri, id=request.session["panitia"]["id"])
+        if not juri.is_supersubstansi:
+            messages.error(request, "Hanya super substansi yang bisa mengubah juri.")
+            return redirect("sibijaks25:panitia_naskah")
+        id_naskah = request.POST.get("id_naskah")
+        naskah = get_object_or_404(Naskah, id=id_naskah)
+        form = NaskahJuriForm(request.POST, instance=naskah)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Juri berhasil ditetapkan untuk naskah ini.")
+        else:
+            messages.error(request, "Gagal menyimpan juri.")
+            return redirect("sibijaks25:panitia_detail_naskah", id=naskah.id)
+    return redirect("sibijaks25:panitia_naskah")
 
 
 @login_required
@@ -102,6 +124,9 @@ def detail_naskah(request, id):
         "ada_pasfoto": ada_pasfoto,
         "bisa_dinilai": bisa_dinilai,
         "is_supersubstansi": juri.is_supersubstansi,
+        "form_juri": (
+            NaskahJuriForm(instance=naskah) if juri.is_supersubstansi else None
+        ),
     }
     return render(request, "sibijaks25/panitia/detail_naskah.html", context)
 

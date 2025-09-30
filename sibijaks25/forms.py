@@ -38,6 +38,12 @@ class NaskahForm(forms.ModelForm):
             )
 
 
+class NaskahJuriForm(forms.ModelForm):
+    class Meta:
+        model = Naskah
+        fields = ["juris"]
+
+
 class KolaboratorForm(forms.ModelForm):
     class Meta:
         model = Kolaborator

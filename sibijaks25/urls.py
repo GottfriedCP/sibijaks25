@@ -30,5 +30,7 @@ urlpatterns = [
         views_panitia.simpan_penilaian,
         name="simpan_penilaian",
     ),
+    # simpan juri naskah
+    path("panitia/simpan-juri/", views_panitia.simpan_juri, name="simpan_juri"),
     path("login-panitia/", views_panitia.login_panitia_view, name="login_panitia"),
 ]

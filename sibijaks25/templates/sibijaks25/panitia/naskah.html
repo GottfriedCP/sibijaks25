@@ -22,8 +22,6 @@
         <b>Per {% now "d F Y" %}</b>
         <dt>Jumlah tim terdaftar</dt>
         <dd>{{ jumlah_tim }}</dd>
-        <dt>Jumlah tim sudah unggah naskah</dt>
-        <dd>{{ jumlah_tim_dengan_naskah }}</dd>
         <dt>Jumlah naskah terdaftar</dt>
         <dd>{{ jumlah_naskah }} ({{ jumlah_artikel }} Artikel Ilmiah + {{ jumlah_pb }} PB)</dd>
     </dl>
@@ -40,11 +38,12 @@
                         <th>Judul</th>
                         <th>Ketua Tim</th>
                         <th>Status</th>
+                        <th>Jumlah Juri</th>
                         <th>Tindakan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for naskah, bisa_dinilai in naskahs %}
+                    {% for naskah, bisa_dinilai, jumlah_juri in naskahs %}
                     <tr>
                         <td class="text-center">{{ forloop.counter }}</td>
                         <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
@@ -58,7 +57,9 @@
                             <span class="badge text-bg-success">Sudah skrining</span>
                             {% endif %}
                         </td>
+                        <td class="text-center">{{ jumlah_juri }}</td>
                         <td>
+                            <!-- Tindakan -->
                             <div class="d-flex flex-wrap gap-2">
                                 <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:panitia_detail_naskah' naskah.id %}">Lihat</a>
                                 {% comment %}

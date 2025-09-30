@@ -42,13 +42,13 @@ class Command(BaseCommand):
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
             message = f"""
-*1 Hari Lagi Batas Waktu Unggah Naskah SiBijaKs Awards 2025*
+*Hari Terakhir untuk Unggah Naskah SiBijaKs Awards 2025*
 
-Selamat siang, Ibu/Bapak {c['nama']}.
+Ibu/Bapak {c['nama']}.
 
 Terima kasih sudah mendaftar untuk berpartisipasi dalam ajang SiBijaKs Awards 2025.
-Tidak terasa batas akhir pengumpulan konsep naskah SiBijaks Awards 2025 tinggal 1 hari lagi.
-Yuk, segera unggah konsep naskah terbaiknya sebelum tanggal 30 September 2025 pukul 23:59 WIB.
+Pengumpulan konsep naskah SiBijaks Awards 2025 akan ditutup pada hari ini, 30 September 2025.
+Ayo, segera unggah konsep naskah sebelum pukul 23:59 WIB.
 
 *Data SSGI 2024 Untuk Kebijakan Berkelanjutan*
 ---

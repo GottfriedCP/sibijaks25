@@ -250,6 +250,14 @@ class Naskah(TimestampedModel):
     s5 = models.BooleanField(default=False)
     komentar1 = models.TextField(blank=True, null=True)
     komentar2 = models.TextField(blank=True, null=True)
+    juris = models.ManyToManyField(
+        "Juri",
+        through="Review2",
+        related_name="naskahs",
+        verbose_name="Juri Tahap Seleksi Konsep",
+        blank=True,
+        # help_text='Juri yang melakukan review tahap 2 untuk naskah ini.',
+    )
 
     class Meta:
         verbose_name_plural = "Naskah"
@@ -269,6 +277,14 @@ class Juri(TimestampedModel):
         (2, "Tahap 2"),
         (3, "Tahap 3"),
     ]
+    ARTIKEL_ILMIAH = "art"
+    POLICY_BRIEF = "pb"
+    AI_PB = "artpb"
+    JENIS_NASKAH_CHOICES = {
+        ARTIKEL_ILMIAH: "AI",
+        POLICY_BRIEF: "PB",
+        AI_PB: "AI/PB",
+    }
     nama = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     nomor_wa = models.CharField(
@@ -279,15 +295,22 @@ class Juri(TimestampedModel):
     )
     institusi = models.CharField(max_length=500, blank=True, null=True)
     pekerjaan = models.CharField(max_length=255, blank=True, null=True)
+    # flag untuk show/hide informasi tertentu
     is_panitia = models.BooleanField(default=False)
     is_supersubstansi = models.BooleanField(default=False)
     tahap = models.IntegerField(choices=TAHAP_CHOICES, default=1)
+    jenis_naskah = models.CharField(
+        max_length=10,
+        choices=JENIS_NASKAH_CHOICES,
+        default=AI_PB,
+        help_text="Jenis naskah yang diberikan untuk di-review oleh juri ini.",
+    )
 
     class Meta:
         verbose_name_plural = "Juri"
 
     def __str__(self):
-        return self.nama
+        return f"{self.nama} - ({self.JENIS_NASKAH_CHOICES.get(self.jenis_naskah)})"
 
 
 class Review1(TimestampedModel):
@@ -312,3 +335,32 @@ class Review1(TimestampedModel):
 
     def __str__(self):
         return f"Review {self.juri.nama} - {self.naskah.judul}"
+
+
+class Review2(TimestampedModel):
+    """Review2 (Review 2) adalah review melibatkan eksternal."""
+
+    juri = models.ForeignKey(Juri, on_delete=models.CASCADE, related_name="reviews2")
+    naskah = models.ForeignKey(
+        Naskah, on_delete=models.CASCADE, related_name="reviews2"
+    )
+    s1 = models.IntegerField(default=0)
+    s2 = models.IntegerField(default=0)
+    s3 = models.IntegerField(default=0)
+    s4 = models.IntegerField(default=0)
+    s5 = models.IntegerField(default=0)
+    s6 = models.IntegerField(default=0)
+    komentar = models.TextField(blank=True, null=True)
+    total = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("juri", "naskah")
+        verbose_name = "Review 2"
+        verbose_name_plural = "Review 2"
+
+    def __str__(self):
+        return f"Review {self.juri.nama} - {self.naskah.judul}"
+
+    def save(self, *args, **kwargs):
+        self.total = self.s1 + self.s2 + self.s3 + self.s4 + self.s5 + self.s6
+        super().save(*args, **kwargs)

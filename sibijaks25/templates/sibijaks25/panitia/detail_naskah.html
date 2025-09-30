@@ -1,7 +1,7 @@
 {% extends "BASE.html" %}
 {% load static django_bootstrap5 %}
 
-{% block title_bl %}Beranda{% endblock %}
+{% block title_bl %}Detail Naskah{% endblock %}
 
 {% block header_bl %}
 {% endblock %}
@@ -10,7 +10,7 @@
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:panitia_naskah' %}">Naskah Saya</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:panitia_naskah' %}">Naskah Peserta</a></li>
             <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
         </ol>
     </nav>
@@ -183,6 +183,14 @@
             <p class="mt-3">Naskah ini <b>tidak lolos</b> seleksi administrasi.</p>
             {% else %}
             <p class="mt-3">Naskah ini <b>lolos</b> seleksi administrasi.</p>
+                {% if form_juri %}
+                <form method="POST" action="{% url 'sibijaks25:simpan_juri' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="id_naskah" value="{{ naskah.id }}">
+                    {% bootstrap_form form_juri %}
+                    <button type="submit" class="btn btn-kemkes">Simpan Juri</button>
+                </form>
+                {% endif %}
             {% endif %}
         </div>
         {% endif %}
@@ -192,6 +200,10 @@
 
 {% block body_add_bl %}
 <script>
-    
+    $(document).ready(function () {
+        // {% if form_juri %}
+        $('#id_juris').select2();
+        // {% endif %}
+    });
 </script>
 {% endblock %}
