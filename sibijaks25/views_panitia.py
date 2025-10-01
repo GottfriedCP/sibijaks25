@@ -116,7 +116,7 @@ def detail_naskah(request, id):
     ada_pasfoto = bool(getattr(naskah.peserta, "pasfoto", None))
     bisa_dinilai = not bool(naskah.verifier1)
     if juri.is_supersubstansi:
-        bisa_dinilai = not bool(naskah.verifier2)
+        bisa_dinilai = naskah.status_naskah != 666 and not bool(naskah.verifier2)
     reviewers = (
         Juri.objects.filter(is_panitia=False)
         .prefetch_related("naskahs")
