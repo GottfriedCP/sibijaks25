@@ -27,7 +27,7 @@ def naskah(request):
     for n in naskahs:
         bisa_dinilai = not bool(n.verifier1)
         if juri.is_supersubstansi:
-            bisa_dinilai = not bool(n.verifier2)
+            bisa_dinilai = n.status_naskah != 666 and not bool(n.verifier2)
         jumlah_juri = n.juris.count()
         naskahs_list.append((n, bisa_dinilai, jumlah_juri))
     context = {
