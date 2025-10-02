@@ -1,0 +1,110 @@
+{% extends 'BASE.html' %}
+{% load static django_bootstrap5 %}
+
+{% block title_bl %}Naskah{% endblock %}
+
+{% block body_bl %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sibijaks25:index' %}">Beranda</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Naskah Tim</li>
+        </ol>
+    </nav>
+    <h1>Daftar Naskah</h1>
+    <div class="my-3">
+        {% bootstrap_messages %}
+    </div>
+    <div class="my-3 d-flex flex-wrap gap-3">
+        
+    </div>
+    <div class="my-5">
+        {% if naskahs %}
+        <div class="div-table overflow-x-auto">
+            <table id="datatable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tanggal</th>
+                        <th>Jenis Naskah</th>
+                        <th>Judul</th>
+                        <th>Status</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for naskah, bisa_dinilai in naskahs %}
+                    <tr>
+                        <td class="text-center">{{ naskah.id }}</td>
+                        <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
+                        <td>{{ naskah.get_jenis_naskah_display }}</td>
+                        <td>{{ naskah.judul }}</td>
+                        <td>
+                            {% if bisa_dinilai %}
+                            <span class="badge text-bg-warning">Menunggu review</span>
+                            {% else %}
+                            <span class="badge text-bg-success">Sudah review</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Tindakan -->
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:panitia_detail_naskah' naskah.id %}">Lihat</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info" role="alert">
+            Belum ada naskah ditugaskan
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block body_add_bl %}
+<script>
+    $(document).ready(function () {
+        $('#datatable').DataTable({
+            pageLength: 50,
+            // lengthMenu: [100, 50, 25, 10],
+            // order: [[0, asc]],
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/id.json',
+            },
+            paging: true,
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": -1 // -1 refers to the last column
+                }
+            ]
+            // initComplete: function () {
+            //     this.api()
+            //         .columns()
+            //         .every(function () {
+            //             let column = this;
+            //             let title = column.footer().textContent;
+
+            //             // Create input element
+            //             let input = document.createElement('input');
+            //             input.placeholder = title;
+            //             column.footer().replaceChildren(input);
+
+            //             // Event listener for user input
+            //             input.addEventListener('keyup', () => {
+            //                 if (column.search() !== this.value) {
+            //                     column.search(input.value).draw();
+            //                 }
+            //             });
+            //         });
+            // }
+        });
+    });
+</script>
+{% endblock %}

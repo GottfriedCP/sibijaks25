@@ -84,8 +84,7 @@ def simpan_penilaian(request):
             )
         naskah.save()
         messages.success(request, "Penilaian berhasil disimpan.")
-        return redirect("sibijaks25:panitia_naskah")
-    return redirect("sibijaks25:panitia_detail_naskah", id=naskah.id)
+    return redirect("sibijaks25:panitia_naskah")
 
 
 @login_required
@@ -160,6 +159,9 @@ def login_panitia_view(request):
                 "email": juri.email,
                 "nomor_wa": juri.nomor_wa,
             }
+            if not juri.is_panitia:
+                # Redirect ke halaman naskah versi reviewer
+                return redirect("sibijaks25:rev_naskah")
         else:
             messages.error(request, "Base user panitia belum dibuat.")
             return redirect("sibijaks25:login_panitia")
