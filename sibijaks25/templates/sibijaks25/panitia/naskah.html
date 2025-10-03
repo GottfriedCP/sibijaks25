@@ -28,6 +28,13 @@
         <dt>Jumlah naskah terdaftar</dt>
         <dd>{{ jumlah_naskah }} ({{ jumlah_artikel }} Artikel Ilmiah + {{ jumlah_pb }} PB)</dd>
     </dl>
+    <dl class="p-3" style="border: 1px solid grey;">
+        <b>Tahap Skrining (Seleksi Administrasi)</b>
+        <dt>Jumlah artikel ilmiah lolos</dt>
+        <dd>{{ jumlah_artikel_lolos_skrining }}</dd>
+        <dt>Jumlah PB lolos</dt>
+        <dd>{{ jumlah_pb_lolos_skrining }}</dd>
+    </dl>
     {% endif %}
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
@@ -57,8 +64,10 @@
                         <td>
                             {% if bisa_dinilai %}
                             <span class="badge text-bg-warning">Menunggu skrining</span>
+                            {% elif naskah.status_naskah == 666 %}
+                            <span class="badge text-bg-danger">Gugur</span>
                             {% else %}
-                            <span class="badge text-bg-success">Sudah skrining</span>
+                            <span class="badge text-bg-success">Lolos skrining</span>
                             {% endif %}
                         </td>
                         <td class="text-center">{{ jumlah_juri }}</td>

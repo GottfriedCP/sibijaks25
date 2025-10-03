@@ -36,7 +36,17 @@ def naskah(request):
         "jumlah_tim_dengan_naskah": jumlah_tim_dengan_naskah,
         "jumlah_naskah": naskahs.count(),
         "jumlah_artikel": naskahs.filter(jenis_naskah=Naskah.ARTIKEL_ILMIAH).count(),
+        "jumlah_artikel_lolos_skrining": naskahs.filter(
+            jenis_naskah=Naskah.ARTIKEL_ILMIAH, verified=True
+        )
+        .exclude(status_naskah=666)
+        .count(),
         "jumlah_pb": naskahs.filter(jenis_naskah=Naskah.POLICY_BRIEF).count(),
+        "jumlah_pb_lolos_skrining": naskahs.filter(
+            jenis_naskah=Naskah.POLICY_BRIEF, verified=True
+        )
+        .exclude(status_naskah=666)
+        .count(),
         "naskahs": naskahs_list,
     }
     return render(request, "sibijaks25/panitia/naskah.html", context)
