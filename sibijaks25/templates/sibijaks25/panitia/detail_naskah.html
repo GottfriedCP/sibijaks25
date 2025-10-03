@@ -198,7 +198,7 @@
             {% endif %}
         </div>
         <div id="div-juri-naskah">
-            <h3 class="fs-4">Daftar Reviewer Tersedia</h3>
+            <h3 class="fs-4">Daftar <i>Reviewer</i> Tersedia</h3>
             <table id="datatable" class="table table-sm">
                 <thead>
                     <tr>
@@ -218,7 +218,7 @@
                         <td>{{ r.get_jenis_naskah_display }}</td>
                         <td>{{ r.institusi|default:'-' }}</td>
                         <td>{{ r.pekerjaan|default:'-' }}</td>
-                        <td>{{ jml_naskah }}</td>
+                        <td class="text-center">{{ jml_naskah }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -236,6 +236,42 @@
         $('#id_juris').select2();
         // {% endif %}
         $('label').css('font-weight', 'bold');
+        $('#datatable').DataTable({
+            pageLength: 50,
+            // lengthMenu: [100, 50, 25, 10],
+            // order: [[0, asc]],
+            searching: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/id.json',
+            },
+            paging: true,
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": -1 // -1 refers to the last column
+                }
+            ]
+            // initComplete: function () {
+            //     this.api()
+            //         .columns()
+            //         .every(function () {
+            //             let column = this;
+            //             let title = column.footer().textContent;
+
+            //             // Create input element
+            //             let input = document.createElement('input');
+            //             input.placeholder = title;
+            //             column.footer().replaceChildren(input);
+
+            //             // Event listener for user input
+            //             input.addEventListener('keyup', () => {
+            //                 if (column.search() !== this.value) {
+            //                     column.search(input.value).draw();
+            //                 }
+            //             });
+            //         });
+            // }
+        });
     });
 </script>
 {% endblock %}
