@@ -103,9 +103,9 @@ def simpan_penilaian(request):
 def simpan_juri(request):
     if request.method == "POST":
         juri = get_object_or_404(Juri, id=request.session["panitia"]["id"])
-        if not juri.is_supersubstansi:
-            messages.error(request, "Hanya super substansi yang bisa mengubah juri.")
-            return redirect("sibijaks25:panitia_naskah")
+        # if not juri.is_supersubstansi:
+        #     messages.error(request, "Hanya super substansi yang bisa mengubah juri.")
+        #     return redirect("sibijaks25:panitia_naskah")
         id_naskah = request.POST.get("id_naskah")
         naskah = get_object_or_404(Naskah, id=id_naskah)
         form = NaskahJuriForm(request.POST, instance=naskah)
