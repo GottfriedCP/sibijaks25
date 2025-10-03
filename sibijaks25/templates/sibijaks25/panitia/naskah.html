@@ -18,13 +18,17 @@
     <div class="my-3 d-flex flex-wrap gap-3">
         
     </div>
-    <dl>
-        <b>Per {% now "d F Y" %}</b>
-        <dt>Jumlah tim terdaftar</dt>
+    {% if juri.is_panitia %}
+    <dl class="p-3" style="border: 1px solid grey;">
+        <b>Per 30 September 2025 pukul 23:59 WIB</b>
+        <dt>Jumlah tim mendaftar</dt>
         <dd>{{ jumlah_tim }}</dd>
+        <dt>Jumlah tim yang sudah mengunggah minimal 1 naskah</dt>
+        <dd>{{ jumlah_tim_dengan_naskah }}</dd>
         <dt>Jumlah naskah terdaftar</dt>
         <dd>{{ jumlah_naskah }} ({{ jumlah_artikel }} Artikel Ilmiah + {{ jumlah_pb }} PB)</dd>
     </dl>
+    {% endif %}
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
         {% if naskahs %}

@@ -31,6 +31,7 @@ def naskah(request):
         jumlah_juri = n.juris.count()
         naskahs_list.append((n, bisa_dinilai, jumlah_juri))
     context = {
+        "juri": juri,
         "jumlah_tim": jumlah_tim,
         "jumlah_tim_dengan_naskah": jumlah_tim_dengan_naskah,
         "jumlah_naskah": naskahs.count(),

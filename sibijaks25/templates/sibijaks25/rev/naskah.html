@@ -15,6 +15,10 @@
     <div class="my-3">
         {% bootstrap_messages %}
     </div>
+    <dl>
+        <dt>Nama Reviewer</dt>
+        <dd>{{ juri.nama }}</dd>
+    </dl>
     <div class="my-3 d-flex flex-wrap gap-3">
         
     </div>
@@ -49,7 +53,7 @@
                         <td>
                             <!-- Tindakan -->
                             <div class="d-flex flex-wrap gap-2">
-                                <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:panitia_detail_naskah' naskah.id %}">Lihat</a>
+                                <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:rev_detail_naskah' naskah.id %}">Lihat</a>
                             </div>
                         </td>
                     </tr>

@@ -35,4 +35,14 @@ urlpatterns = [
     path("login-panitia/", views_panitia.login_panitia_view, name="login_panitia"),
     # URLS REVIEWER
     path("rev/naskah/", views_rev.naskah, name="rev_naskah"),
+    path(
+        "rev/naskah/<int:id>/",
+        views_rev.detail_naskah,
+        name="rev_detail_naskah",
+    ),
+    path(
+        "rev/simpan-penilaian/",
+        views_rev.simpan_penilaian,
+        name="rev_simpan_penilaian",
+    ),  # simpan penilaian review naskah
 ]
