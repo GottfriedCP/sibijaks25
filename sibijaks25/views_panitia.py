@@ -144,7 +144,7 @@ def detail_naskah(request, id):
         "is_supersubstansi": juri.is_supersubstansi,
         "form_juri": (
             NaskahJuriForm(instance=naskah, rev_only=True)
-            if juri.is_supersubstansi and not naskah.status_naskah == 666
+            if juri.is_panitia and not naskah.status_naskah == 666
             else None
         ),
         "reviewers": reviewers_list,
