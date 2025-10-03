@@ -183,18 +183,18 @@
             <p class="mt-3">Naskah ini <b>tidak lolos</b> seleksi administrasi.</p>
             {% else %}
             <p class="mt-3">Naskah ini <b>lolos</b> seleksi administrasi.</p>
+            {% endif %}
             <b>Komentar verifikator 1:</b><br>
             <div class="mb-3">{{ naskah.komentar1|default:'-' }}</div>
             <b>Komentar verifikator 2:</b><br>
             <div class="mb-3">{{ naskah.komentar2|default:'-' }}</div>
-                {% if form_juri %}
-                <form method="POST" action="{% url 'sibijaks25:simpan_juri' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="id_naskah" value="{{ naskah.id }}">
-                    {% bootstrap_form form_juri %}
-                    <button type="submit" class="btn btn-kemkes">Simpan Reviewer</button>
-                </form>
-                {% endif %}
+            {% if form_juri %}
+            <form method="POST" action="{% url 'sibijaks25:simpan_juri' %}">
+                {% csrf_token %}
+                <input type="hidden" name="id_naskah" value="{{ naskah.id }}">
+                {% bootstrap_form form_juri %}
+                <button type="submit" class="btn btn-kemkes">Simpan Reviewer</button>
+            </form>
             {% endif %}
         </div>
         <div id="div-juri-naskah">

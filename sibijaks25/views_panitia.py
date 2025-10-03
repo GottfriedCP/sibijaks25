@@ -143,7 +143,9 @@ def detail_naskah(request, id):
         "bisa_dinilai": bisa_dinilai,
         "is_supersubstansi": juri.is_supersubstansi,
         "form_juri": (
-            NaskahJuriForm(instance=naskah) if juri.is_supersubstansi else None
+            NaskahJuriForm(instance=naskah)
+            if juri.is_supersubstansi and not naskah.status_naskah == 666
+            else None
         ),
         "reviewers": reviewers_list,
     }
