@@ -198,12 +198,13 @@
             {% endif %}
         </div>
         <div id="div-juri-naskah">
-            <h3 class="fs-4">Daftar Reviewer</h3>
-            <table class="table table-sm">
+            <h3 class="fs-4">Daftar Reviewer Tersedia</h3>
+            <table id="datatable" class="table table-sm">
                 <thead>
                     <tr>
-                        <th>No.</th>
+                        <th>ID</th>
                         <th>Nama Reviewer</th>
+                        <th>Jenis Naskah</th>
                         <th>Institusi</th>
                         <th>Profesi</th>
                         <th>Jumlah Naskah Ditugaskan</th>
@@ -212,8 +213,9 @@
                 <tbody>
                     {% for r, jml_naskah in reviewers %}
                     <tr>
-                        <td>{{ forloop.counter }}</td>
+                        <td>{{ r.id }}</td>
                         <td>{{ r }}</td>
+                        <td>{{ r.get_jenis_naskah_display }}</td>
                         <td>{{ r.institusi|default:'-' }}</td>
                         <td>{{ r.pekerjaan|default:'-' }}</td>
                         <td>{{ jml_naskah }}</td>

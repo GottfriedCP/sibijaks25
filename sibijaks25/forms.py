@@ -1,5 +1,5 @@
 from django import forms
-from .models import Peserta, Naskah, Kolaborator
+from .models import Peserta, Juri, Naskah, Kolaborator
 
 
 class PesertaForm(forms.ModelForm):
@@ -42,6 +42,11 @@ class NaskahJuriForm(forms.ModelForm):
     class Meta:
         model = Naskah
         fields = ["juris"]
+
+    def __init__(self, *args, rev_only=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if rev_only:
+            self.fields["juris"].queryset = Juri.objects.filter(is_panitia=False)
 
 
 class KolaboratorForm(forms.ModelForm):
