@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required, staff_required
 from .forms import NaskahJuriForm
-from .models import Banner, Juri, Naskah, Peserta, Review1
+from .models import Banner, Juri, Naskah, Peserta, Review1, Review2
 
 from environs import env
 
@@ -30,6 +30,19 @@ def naskah(request):
             bisa_dinilai = n.status_naskah != 666 and not bool(n.verifier2)
         jumlah_juri = n.juris.count()
         naskahs_list.append((n, bisa_dinilai, jumlah_juri))
+    
+    reviewers = (
+        Juri.objects.filter(is_panitia=False)
+        .prefetch_related("naskahs")
+        .order_by("nama")
+    )
+    reviewers_list = []
+    for r in reviewers:
+        jml_naskah_selesai = Review2.objects.filter(juri=r, total__gt=0).count()
+        jml_naskah = r.naskahs.count()
+        selesai = "Ya" if jml_naskah_selesai == jml_naskah else "Belum"
+        reviewers_list.append((r, jml_naskah, jml_naskah_selesai, selesai))
+    
     context = {
         "juri": juri,
         "jumlah_tim": jumlah_tim,
@@ -48,6 +61,7 @@ def naskah(request):
         .exclude(status_naskah=666)
         .count(),
         "naskahs": naskahs_list,
+        "reviewers": reviewers_list,
     }
     return render(request, "sibijaks25/panitia/naskah.html", context)
 
@@ -134,8 +148,9 @@ def detail_naskah(request, id):
     )
     reviewers_list = []
     for r in reviewers:
+        jml_naskah_selesai = Review2.objects.filter(juri=r, total__gt=0).count()
         jml_naskah = r.naskahs.count()
-        reviewers_list.append((r, jml_naskah))
+        reviewers_list.append((r, jml_naskah, jml_naskah_selesai))
     context = {
         "naskah": naskah,
         "juri": juri,

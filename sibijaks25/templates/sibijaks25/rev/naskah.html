@@ -18,6 +18,8 @@
     <dl>
         <dt>Nama Reviewer</dt>
         <dd>{{ juri.nama }}</dd>
+        <dt>Jumlah naskah menunggu penilaian</dt>
+        <dd>{{ jml_naskah_todo }}</dd>
     </dl>
     <div class="my-3 d-flex flex-wrap gap-3">
         
@@ -33,11 +35,12 @@
                         <th>Jenis Naskah</th>
                         <th>Judul</th>
                         <th>Status</th>
+                        <th>Skor Total</th>
                         <th>Tindakan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for naskah, bisa_dinilai in naskahs %}
+                    {% for naskah, bisa_dinilai, skor_total in naskahs %}
                     <tr>
                         <td class="text-center">{{ naskah.id }}</td>
                         <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
@@ -50,6 +53,7 @@
                             <span class="badge text-bg-success">Sudah review</span>
                             {% endif %}
                         </td>
+                        <td class="text-center">{{ skor_total }}</td>
                         <td>
                             <!-- Tindakan -->
                             <div class="d-flex flex-wrap gap-2">

@@ -352,6 +352,7 @@ class Review2(TimestampedModel):
     s6 = models.IntegerField(default=0)
     komentar = models.TextField(blank=True, null=True)
     total = models.IntegerField(default=0)
+    lanjut = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("juri", "naskah")

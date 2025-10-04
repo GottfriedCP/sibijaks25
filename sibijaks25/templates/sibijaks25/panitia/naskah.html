@@ -35,6 +35,39 @@
         <dt>Jumlah PB lolos</dt>
         <dd>{{ jumlah_pb_lolos_skrining }}</dd>
     </dl>
+    <div class="p-3" style="border: 1px solid grey;">
+        <button class="btn btn-kemkes btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#penugasanJuri">
+            Lihat status penugasan reviewer
+        </button>
+        <div class="collapse" id="penugasanJuri">
+            {% if reviewers %}
+            <table class="mt-2 table table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Reviewer</th>
+                        <th>Jenis Naskah</th>
+                        <th class="text-center">Jumlah Naskah Ditugaskan</th>
+                        <th class="text-center">Jumlah Naskah Selesai</th>
+                        <th class="text-center">Selesai Semua?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r, jml_naskah, jml_naskah_selesai, selesai in reviewers %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.nama }}</td>
+                        <td>{{ r.get_jenis_naskah_display }}</td>
+                        <td class="text-center">{{ jml_naskah }}</td>
+                        <td class="text-center">{{ jml_naskah_selesai }}</td>
+                        <td class="text-center">{{ selesai }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
     {% endif %}
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
@@ -87,6 +120,18 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tanggal</th>
+                        <th>Jenis Naskah</th>
+                        <th>Judul</th>
+                        <th>Ketua Tim</th>
+                        <th>Status</th>
+                        <th>Jumlah Juri</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         {% else %}
@@ -115,27 +160,27 @@
                     "orderable": false,
                     "targets": -1 // -1 refers to the last column
                 }
-            ]
-            // initComplete: function () {
-            //     this.api()
-            //         .columns()
-            //         .every(function () {
-            //             let column = this;
-            //             let title = column.footer().textContent;
+            ],
+            initComplete: function () {
+                this.api()
+                    .columns()
+                    .every(function () {
+                        let column = this;
+                        let title = column.footer().textContent;
 
-            //             // Create input element
-            //             let input = document.createElement('input');
-            //             input.placeholder = title;
-            //             column.footer().replaceChildren(input);
+                        // Create input element
+                        let input = document.createElement('input');
+                        input.placeholder = title;
+                        column.footer().replaceChildren(input);
 
-            //             // Event listener for user input
-            //             input.addEventListener('keyup', () => {
-            //                 if (column.search() !== this.value) {
-            //                     column.search(input.value).draw();
-            //                 }
-            //             });
-            //         });
-            // }
+                        // Event listener for user input
+                        input.addEventListener('keyup', () => {
+                            if (column.search() !== this.value) {
+                                column.search(input.value).draw();
+                            }
+                        });
+                    });
+            }
         });
     });
 </script>

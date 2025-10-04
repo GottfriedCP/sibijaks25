@@ -208,10 +208,11 @@
                         <th>Institusi</th>
                         <th>Profesi</th>
                         <th>Jumlah Naskah Ditugaskan</th>
+                        <th>Jumlah Naskah Selesai</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for r, jml_naskah in reviewers %}
+                    {% for r, jml_naskah, jml_naskah_selesai in reviewers %}
                     <tr>
                         <td>{{ r.id }}</td>
                         <td>{{ r }}</td>
@@ -219,6 +220,7 @@
                         <td>{{ r.institusi|default:'-' }}</td>
                         <td>{{ r.pekerjaan|default:'-' }}</td>
                         <td class="text-center">{{ jml_naskah }}</td>
+                        <td class="text-center">{{ jml_naskah_selesai }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -244,13 +246,13 @@
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/id.json',
             },
-            paging: true,
-            "columnDefs": [
-                {
-                    "orderable": false,
-                    "targets": -1 // -1 refers to the last column
-                }
-            ]
+            paging: true
+            // "columnDefs": [
+            //     {
+            //         "orderable": false,
+            //         "targets": -1 // -1 refers to the last column
+            //     }
+            // ]
             // initComplete: function () {
             //     this.api()
             //         .columns()

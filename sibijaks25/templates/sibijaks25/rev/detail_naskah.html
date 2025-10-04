@@ -14,7 +14,7 @@
             <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
         </ol>
     </nav>
-    <h1>Detail Naskah</h1>
+    <h1>Detail Naskah <code>ID {{ naskah.id }}</code></h1>
     <h2 class="fs-3">{{ naskah.judul }}</h2>
     <div class="my-3">
         {% bootstrap_messages %}
@@ -37,19 +37,31 @@
         </div>
     </div>
     <div class="mt-5" id="div-form-penilaian">
+        {% if sudah_review %}
+        <h4>Hasil Penilaian Konsep</h4>
+        Bapak/Ibu telah menilai naskah ini.<br>
+        Nilai total naskah ini: <b>{{ nilai_akhir }}</b><br>
+        Rekomendasi: <b>{{ status_lanjut }}</b>
+        {% else %}
         <h2 class="fs-3">Form Penilaian</h2>
-        <form method="POST" action="{% url 'sibijaks25:rev_simpan_penilaian' %}">
+        <form method="POST" action="{% url 'sibijaks25:rev_simpan_penilaian' %}" class="p-3" style="border: 1px solid grey;">
             {% csrf_token %}
             <p>Nama Reviewer: <b>{{ juri.nama }}</b></p>
+            <div class="alert alert-info">
+                <b>Untuk setiap komponen penilaian, mohon berikan nilai antara 1 sampai 5</b>
+            </div>
             <input type="hidden" name="id_naskah" id="id_naskah" value="{{ naskah.id }}">
             {% if jenis_naskah == 'ai' %}
             {% include 'sibijaks25/rev/form_ai.html' %}
             {% else %}
+            {% include 'sibijaks25/rev/form_pb.html' %}
             {% endif %}
+            <p class="text-danger">Penilaian yang disimpan tidak dapat diubah.</p>
             <div class="d-grid gap-2">
                 <button type="submit" class="my-3 btn btn-secondary btn-kemkes">Simpan Penilaian</button>
             </div>
         </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
@@ -60,7 +72,7 @@
         // {% if form_juri %}
         $('#id_juris').select2();
         // {% endif %}
-        $('label').css('font-weight', 'bold');
+        // $('label').css('font-weight', 'bold');
     });
 </script>
 {% endblock %}
