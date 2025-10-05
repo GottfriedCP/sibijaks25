@@ -67,7 +67,7 @@ def simpan_penilaian(request):
         r5 = int(request.POST.get("r5", 0))
         r6 = int(request.POST.get("r6", 0))
         k = str(request.POST.get("k", "")).strip()
-        l = bool(request.POST.get("l", False))
+        l = bool(int(request.POST.get("l", 0)))
         rev = get_object_or_404(Review2, juri=juri, naskah=naskah)
         rev.s1 = r1
         rev.s2 = r2
