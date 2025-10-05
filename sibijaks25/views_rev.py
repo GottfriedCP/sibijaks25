@@ -43,6 +43,7 @@ def detail_naskah(request, id):
         "naskah": naskah,
         "juri": juri,
         "jenis_naskah": jenis_naskah,
+        "review": rev,
         "sudah_review": rev.total > 0,
         "nilai_akhir": rev.total,
         "status_lanjut": (

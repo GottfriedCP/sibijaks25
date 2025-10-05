@@ -41,6 +41,7 @@
         <h4>Hasil Penilaian Konsep</h4>
         Bapak/Ibu telah menilai naskah ini.<br>
         Nilai total naskah ini: <b>{{ nilai_akhir }}</b><br>
+        Komentar: <b>{{ review.komentar|default:'-' }}</b><br>
         Rekomendasi: <b>{{ status_lanjut }}</b>
         {% else %}
         <h2 class="fs-3">Form Penilaian</h2>
