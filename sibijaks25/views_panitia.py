@@ -176,6 +176,7 @@ def detail_naskah(request, id):
 @staff_required
 def unduh_rekap(request):
     if request.method == "POST":
+        JUMLAH_REVIEWER = 2
         wb = Workbook()
         ws = wb.active
 
@@ -186,8 +187,8 @@ def unduh_rekap(request):
         # Reviewer Konsep
         headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
         headers.extend([f"Reviewer 2", "Skor", "Komentar", "Rekomendasi"])
-        headers.extend([f"Reviewer 3", "Skor", "Komentar", "Rekomendasi"])
-        headers.extend(["Nilai avg", "Predikat"])
+        # headers.extend([f"Reviewer 3", "Skor", "Komentar", "Rekomendasi"])
+        headers.extend(["Selesai Review Konsep", "Nilai avg", "Predikat"])
         ws.append(headers)
 
         naskahs = Naskah.objects.select_related("peserta")
@@ -214,24 +215,31 @@ def unduh_rekap(request):
             )
             # Reviewer Konsep (data)
             total_nilai = 0
+            selesai_semua = True
             for r in naskah.reviews2.all():
                 total_nilai += r.total
+                rekomendasi = "Lanjut FT"
+                if r.total == 0:
+                    selesai_semua = False
+                    rekomendasi = "-"
+                elif r.total > 0 and not r.lanjut:
+                    rekomendasi = "Tidak lanjut"
                 row.extend([
                     r.juri.nama,
-                    r.total,
-                    r.komentar,
-                    "Lanjut FT" if r.lanjut else "Tidak lanjut",
+                    "-" if r.total == 0 else r.total,
+                    r.komentar or "-",
+                    rekomendasi,
                 ])
-            if naskah.reviews2.count() == 2:
-                row.extend(["-", "-", "-", "-"])
-            nilai_avg = Decimal(total_nilai)/Decimal(2)
-            nilai_avg = nilai_avg.quantize(Decimal('0.00'))
-            predikat = "Kurang Baik"
-            if nilai_avg > Decimal(400):
-                predikat = "Sangat Baik"
-            elif nilai_avg > Decimal(200):
-                predikat = "Baik"
-            row.extend([nilai_avg, predikat])
+
+            if naskah.status_naskah != 666 and selesai_semua:
+                nilai_avg = Decimal(total_nilai)/Decimal(JUMLAH_REVIEWER)
+                nilai_avg = nilai_avg.quantize(Decimal('0.00'))
+                predikat = "Kurang Baik"
+                if nilai_avg > Decimal(400):
+                    predikat = "Sangat Baik"
+                elif nilai_avg > Decimal(200):
+                    predikat = "Baik"
+                row.extend(["Sudah", nilai_avg, predikat])
             ws.append(row)
 
         response = HttpResponse(
