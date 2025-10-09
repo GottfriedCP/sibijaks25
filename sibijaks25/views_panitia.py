@@ -1,12 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from .decorators import peserta_session_required, staff_required
 from .forms import NaskahJuriForm
 from .models import Banner, Juri, Naskah, Peserta, Review1, Review2
 
+from decimal import Decimal
+
 from environs import env
+from openpyxl import Workbook
 
 env.read_env()
 
@@ -30,7 +35,7 @@ def naskah(request):
             bisa_dinilai = n.status_naskah != 666 and not bool(n.verifier2)
         jumlah_juri = n.juris.count()
         naskahs_list.append((n, bisa_dinilai, jumlah_juri))
-    
+
     reviewers = (
         Juri.objects.filter(is_panitia=False)
         .prefetch_related("naskahs")
@@ -42,7 +47,7 @@ def naskah(request):
         jml_naskah = r.naskahs.count()
         selesai = "Ya" if jml_naskah_selesai == jml_naskah else "Belum"
         reviewers_list.append((r, jml_naskah, jml_naskah_selesai, selesai))
-    
+
     context = {
         "juri": juri,
         "jumlah_tim": jumlah_tim,
@@ -165,6 +170,79 @@ def detail_naskah(request, id):
         "reviewers": reviewers_list,
     }
     return render(request, "sibijaks25/panitia/detail_naskah.html", context)
+
+
+@login_required
+@staff_required
+def unduh_rekap(request):
+    if request.method == "POST":
+        wb = Workbook()
+        ws = wb.active
+
+        # Write headers
+        headers = ["ID Naskah", "Jenis Naskah", "Judul"]
+        headers.extend(["Ketua Tim", "Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
+        headers.extend(["Status", "Verifier 1", "Verifier 2"])
+        # Reviewer Konsep
+        headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
+        headers.extend([f"Reviewer 2", "Skor", "Komentar", "Rekomendasi"])
+        headers.extend([f"Reviewer 3", "Skor", "Komentar", "Rekomendasi"])
+        headers.extend(["Nilai avg", "Predikat"])
+        ws.append(headers)
+
+        naskahs = Naskah.objects.select_related("peserta")
+        naskahs = naskahs.prefetch_related("reviews2", "reviews2__juri")
+        naskahs = naskahs.order_by("id")
+
+        for naskah in naskahs:
+            status = "Lolos skrining" if naskah.status_naskah != 666 else "Gugur"
+            row = [naskah.id, naskah.get_jenis_naskah_display(), naskah.judul]
+            is_mahasiswa = "Ya" if naskah.peserta.is_mahasiswa else "Bukan"
+            row.extend(
+                [
+                    naskah.peserta.nama,
+                    is_mahasiswa,
+                    naskah.peserta.get_mahasiswa_display() if is_mahasiswa else "-",
+                    naskah.peserta.pekerjaan,
+                    naskah.peserta.institusi,
+                ]
+            )
+            row.extend(
+                [
+                    status, naskah.verifier1, naskah.verifier2
+                ]
+            )
+            # Reviewer Konsep (data)
+            total_nilai = 0
+            for r in naskah.reviews2.all():
+                total_nilai += r.total
+                row.extend([
+                    r.juri.nama,
+                    r.total,
+                    r.komentar,
+                    "Lanjut FT" if r.lanjut else "Tidak lanjut",
+                ])
+            if naskah.reviews2.count() == 2:
+                row.extend(["-", "-", "-", "-"])
+            nilai_avg = Decimal(total_nilai)/Decimal(2)
+            nilai_avg = nilai_avg.quantize(Decimal('0.00'))
+            predikat = "Kurang Baik"
+            if nilai_avg > Decimal(400):
+                predikat = "Sangat Baik"
+            elif nilai_avg > Decimal(200):
+                predikat = "Baik"
+            row.extend([nilai_avg, predikat])
+            ws.append(row)
+
+        response = HttpResponse(
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        now = timezone.now()
+        response["Content-Disposition"] = f"attachment; filename=rekap_{now}.xlsx"
+
+        wb.save(response)
+
+        return response
 
 
 def login_panitia_view(request):

@@ -68,6 +68,12 @@
             {% endif %}
         </div>
     </div>
+    <div class="container m-3">
+        <form method="POST" action="{% url 'sibijaks25:panitia_unduh_rekap' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-kemkes">Unduh Rekap Naskah</button>
+        </form>
+    </div>
     {% endif %}
     <div class="my-5">
         <h2 class="fs-4">Naskah Terdaftar</h2>
