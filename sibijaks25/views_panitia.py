@@ -204,7 +204,7 @@ def unduh_rekap(request):
                     naskah.peserta.nama,
                     is_mahasiswa,
                     naskah.peserta.get_mahasiswa_display() if is_mahasiswa else "-",
-                    naskah.peserta.pekerjaan,
+                    naskah.peserta.pekerjaan or "-",
                     naskah.peserta.institusi,
                 ]
             )
