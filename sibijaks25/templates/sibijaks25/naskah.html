@@ -74,14 +74,18 @@
                 </tr>
             </thead>
             <tbody>
-                {% for naskah in naskahs %}
+                {% for naskah, status in naskahs %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
                     <td>{{ naskah.judul }}</td>
                     <td>{{ naskah.get_jenis_naskah_display }}</td>
                     <td>
-                        <span class="badge text-bg-success">Menunggu penilaian</span>
+                        {% if naskah.status_naskah == 100 %}
+                        <span class="badge text-bg-success">{{ status }}</span>
+                        {% else %}
+                        <span class="badge text-bg-danger">{{ status }}</span>
+                        {% endif %}
                     </td>
                     <td>
                         <div class="d-flex flex-wrap gap-2">

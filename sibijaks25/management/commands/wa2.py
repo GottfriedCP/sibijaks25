@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.db.models import Count
+from django.db.models import Count, Q
 from ...models import Peserta
 
 import requests
@@ -18,21 +18,17 @@ class Command(BaseCommand):
     #     parser.add_argument("poll_ids", nargs="+", type=int)
 
     def handle(self, *args, **options):
-        pesertas_belum_unggah = Peserta.objects.annotate(jml_naskah=Count("naskahs"))
-        pesertas_belum_unggah = pesertas_belum_unggah.filter(jml_naskah=0)
-        if not pesertas_belum_unggah.exists():
-            self.stdout.write(
-                self.style.SUCCESS("Semua peserta sudah mengunggah naskah.")
-            )
-            return
+        pesertas_lolos = Peserta.objects.annotate(
+            jml_naskah=Count("naskahs", filter=Q(naskahs__status_naskah=100))
+        ).filter(jml_naskah__gte=1)
         self.stdout.write(
             self.style.WARNING(
-                f"{pesertas_belum_unggah.count()} peserta belum mengunggah naskah."
+                f"{pesertas_lolos.count()} tim lolos tahap review konsep."
             )
         )
         # return
         contacts = []
-        for p in pesertas_belum_unggah:
+        for p in pesertas_lolos:
             contacts.append({"nama": p.nama, "nomor_wa": p.nomor_wa})
         # For testing, use a fixed contact list
         contacts = [
@@ -42,15 +38,22 @@ class Command(BaseCommand):
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
             message = f"""
-*Hari Terakhir untuk Unggah Naskah SiBijaKs Awards 2025*
+Yth. Ibu/Bapak {c['nama']}.
 
-Ibu/Bapak {c['nama']}.
+Kami ucapkan selamat atas naskah konsep policy brief/artikel imiah yang Ibu/Bapak kirimkan. Satu atau beberapa naskah telah dinyatakan *lolos seleksi* dan dapat dilanjutkan ke tahap berikutnya yaitu pengiriman naskah lengkap (full text). 
 
-Terima kasih sudah mendaftar untuk berpartisipasi dalam ajang SiBijaKs Awards 2025.
-Pengumpulan konsep naskah SiBijaks Awards 2025 akan ditutup pada hari ini, 30 September 2025.
-Ayo, segera unggah konsep naskah sebelum pukul 23:59 WIB.
+Langkah selanjutnya dapat kami sampaikan beberapa hal sebagai berikut:
 
-*Data SSGI 2024 Untuk Kebijakan Berkelanjutan*
+1. Menindaklanjuti hasil penilaian dan mengunggah naskah full text pada website SiBijaKs Awards 2025.
+2. Panduan penulisan policy brief dan artikel ilmiah mengacu pada instrumen penilaian naskah, dapat diakses pada link https://drive.google.com/drive/folders/1V2borxK4NEk6cFatfpuwm08bmpenhCRq?usp=sharing 
+3. Kebutuhan data Survei Status Gizi Indonesia (SSGI) 2024 dapat diajukan melalui Portal Layanan Data Kementerian Kesehatan https://layanandata.kemkes.go.id/
+4. Tata cara permintaan data dapat diakses di https://www.badankebijakan.kemkes.go.id/layanan-permintaan-data/ 
+5. Batas waktu pengiriman naskah lengkap policy brief/artikel ilmiah pada *11 November 2025 pukul 23.59 WIB*
+6. Silakan mengikuti workshop analisis data SSGI 2024 pada tanggal 15-16 Oktober 2025 pada link: https://s.kemkes.go.id/WorkshopAnalisisDataSSGI2024
+
+Kami tunggu kiriman naskah lengkap policy brief/artikel ilmiah terbaiknya dengan menggunakan data SSGI 2024 sebagai sumber data utama.
+
+Data SSGI 2024 Untuk Kebijakan Berkelanjutan
 ---
 Salam sehat,
 Panitia SiBijaKs Awards 2025"""

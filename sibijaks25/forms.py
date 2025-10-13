@@ -38,6 +38,28 @@ class NaskahForm(forms.ModelForm):
             )
 
 
+class NaskahFTForm(forms.ModelForm):
+    class Meta:
+        model = Naskah
+        fields = [
+            "naskah",
+        ]
+
+
+class NaskahKolaboratorForm(forms.ModelForm):
+    class Meta:
+        model = Naskah
+        fields = ["kolaborators"]
+
+    def __init__(self, *args, peserta=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["kolaborators"].widget = forms.CheckboxSelectMultiple()
+        if peserta is not None:
+            self.fields["kolaborators"].queryset = Kolaborator.objects.filter(
+                peserta=peserta
+            )
+
+
 class NaskahJuriForm(forms.ModelForm):
     class Meta:
         model = Naskah

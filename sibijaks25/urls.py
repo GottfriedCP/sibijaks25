@@ -4,6 +4,7 @@ from . import views, views_panitia, views_rev
 
 app_name = "sibijaks25"
 urlpatterns = [
+    # URLS PESERTA
     path("", views.index, name="index"),
     path("registrasi/", views.registrasi, name="registrasi"),
     path("login/", views.login_view, name="login"),

@@ -187,9 +187,10 @@ def naskah_dir_path(instance, filename):
 
 
 class Naskah(TimestampedModel):
+    # tetap 100 mainly for now
     STATUS_NASKAH_CHOICES = [
         (100, "Terunggah"),
-        (200, "Lolos Admin 1"),
+        (200, "Lolos Konsep"),
         (300, "Lolos Admin 2"),
         (666, "Gugur"),
     ]

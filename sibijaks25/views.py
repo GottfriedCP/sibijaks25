@@ -3,9 +3,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from .decorators import peserta_session_required
-from .forms import FotoPesertaForm, PesertaForm, NaskahForm, KolaboratorForm
+from .forms import (
+    FotoPesertaForm,
+    PesertaForm,
+    NaskahForm,
+    NaskahKolaboratorForm,
+    NaskahFTForm,
+    KolaboratorForm,
+)
 from .helpers import _cek_deadline
-from .models import Banner, Countdown, Naskah, Peserta
+from .models import Banner, Countdown, Naskah, Peserta, Review2
 
 
 def index(request):
@@ -91,12 +98,20 @@ def naskah(request):
             "Anda belum menambahkan kolaborator. Silakan tambahkan kolaborator terlebih dahulu (minimal 1 orang).",
         )
     naskahs = peserta.naskahs.all()
+    naskahs_list = []
+    for n in naskahs:
+        status = "Gugur"
+        if n.status_naskah == 100 and n.naskah:
+            status = "Penilaian Full Text"
+        elif n.status_naskah == 100:
+            status = "Belum Unggah"
+        naskahs_list.append((n, status))
     ada_pasfoto = bool(getattr(peserta, "pasfoto", None))
     context = {
         "peserta": peserta,
         "ada_kolaborator": ada_kolaborator,
         "kolaborators": peserta.kolaborators.all(),
-        "naskahs": naskahs,
+        "naskahs": naskahs_list,
         "ada_pasfoto": ada_pasfoto,
     }
     return render(request, "sibijaks25/naskah.html", context)
@@ -148,7 +163,7 @@ def tambah_naskah(request):
             "Anda harus mengunggah pasfoto sebelum menambahkan naskah.",
         )
         return redirect("sibijaks25:naskah")
-    
+
     form = NaskahForm(peserta=peserta)
     if request.method == "POST":
         form = NaskahForm(request.POST, request.FILES, peserta=peserta)
@@ -185,18 +200,45 @@ def hapus_naskah(request, id):
 
 
 @login_required
+@peserta_session_required
 def detail_naskah(request, id):
     wa = request.session.get("peserta", {}).get("nomor_wa")
     email = request.session.get("peserta", {}).get("email")
-    peserta = Peserta.objects.get(nomor_wa=wa, email=email)
-    naskah = peserta.naskahs.filter(id=id).first()
+    peserta = get_object_or_404(
+        Peserta.objects.prefetch_related("naskahs"), nomor_wa=wa, email=email
+    )
+    naskah = get_object_or_404(peserta.naskahs, id=id)
+    form_naskah_ft = NaskahFTForm(instance=naskah)
+    form_naskah_kolaborator = NaskahKolaboratorForm(peserta=peserta, instance=naskah)
+    # masukan dari reviewer
+    masukans = Review2.objects.filter(naskah=naskah)
+    if request.method == "POST":
+        form_naskah_ft = NaskahFTForm(
+            data=request.POST, files=request.FILES, instance=naskah
+        )
+        form_naskah_kolaborator = NaskahKolaboratorForm(
+            request.POST, peserta=peserta, instance=naskah
+        )
+        if form_naskah_ft.is_valid() and form_naskah_kolaborator.is_valid():
+            form_naskah_ft.save()
+            form_naskah_kolaborator.save()
+            messages.success(request, "Naskah berhasil disimpan.")
+            return redirect("sibijaks25:detail_naskah", id=id)
+        else:
+            messages.error(
+                request, "Naskah gagal disimpan. Lihat pesan error di bawah."
+            )
     context = {
         "naskah": naskah,
+        "form_naskah_ft": form_naskah_ft,
+        "form_naskah_kolaborator": form_naskah_kolaborator,
+        "masukans": masukans,
     }
     return render(request, "sibijaks25/detail_naskah.html", context)
 
 
 @login_required
+@peserta_session_required
 def kolaborator(request):
     pass
 

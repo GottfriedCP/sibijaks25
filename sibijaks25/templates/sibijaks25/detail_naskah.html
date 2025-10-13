@@ -64,14 +64,47 @@
         </dl>
         <div class="mt-5">
             <h3>Konsep</h3>
-            <div>{{ naskah.abstrak|safe }}</div>
+            <div style="max-height: 512px; border: 1px solid gray;" class="p-3 overflow-auto">{{ naskah.abstrak|safe }}</div>
         </div>
+        {% if naskah.status_naskah == 100 %}
+        <!-- Form Naskah Full Text -->
+        <div class="mt-5">
+            <h3>Naskah Full Text</h3>
+            <div class="alert alert-info">
+                Selamat! Naskah ini lolos penilaian konsep.<br>
+                Mohon unggah naskah <i>full text</i> sesuai pedoman<br>
+                <b><a href="#" target="_blank">Klik untuk mengunduh pedoman</a></b><br><br>
+                Masukan dari reviewer:
+                <ol>
+                    {% for m in masukans %}
+                    <li><b>Reviewer {{ forloop.counter }}: </b>{{ m.komentar|default:"Tidak ada masukan" }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form_naskah_ft %}
+                {% bootstrap_form form_naskah_kolaborator %}
+                <div class="mt-4 d-grid gap-2">
+                    <button class="btn btn-kemkes" type="submit">Unggah Naskah Full Text</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block body_add_bl %}
 <script>
-    
+    $(document).ready(function() {
+        $('label').css('font-weight', 'bold');
+        $('input, textarea, select').each(function() {
+            $(this).attr('placeholder', '');
+        });
+        $('#id_naskah').attr('required', true);
+        $('#id_naskah').attr('accept', 'application/pdf');
+        $('#naskah-clear_id').parent('div').hide();
+    });
 </script>
 {% endblock %}
