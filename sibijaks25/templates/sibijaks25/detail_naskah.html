@@ -72,8 +72,9 @@
             <h3>Naskah Full Text</h3>
             <div class="alert alert-info">
                 Selamat! Naskah ini lolos penilaian konsep.<br>
-                Mohon unggah naskah <i>full text</i> sesuai pedoman<br>
-                <b><a href="#" target="_blank">Klik untuk mengunduh pedoman</a></b><br><br>
+                Mohon unggah naskah <i>full text</i>, <b>format bebas</b>, namun memuat bagian-bagian mengacu pada instrumen penilaian<br>
+                <b><a href="https://drive.google.com/drive/folders/1V2borxK4NEk6cFatfpuwm08bmpenhCRq?usp=sharing" target="_blank">Klik untuk mengunduh instrumen penilaian</a></b><br><br>
+                <span class="text-bg-danger">Naskah yang diunggah tidak boleh memuat identitas peserta dan tim</span><br>
                 Masukan dari reviewer:
                 <ol>
                     {% for m in masukans %}
@@ -85,6 +86,12 @@
                 {% csrf_token %}
                 {% bootstrap_form form_naskah_ft %}
                 {% bootstrap_form form_naskah_kolaborator %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="noID" required>
+                    <label class="form-check-label" for="noID">
+                        Naskah yang saya unggah tidak mengandung identitas saya dan tim saya
+                    </label>
+                </div>
                 <div class="mt-4 d-grid gap-2">
                     <button class="btn btn-kemkes" type="submit">Unggah Naskah Full Text</button>
                 </div>
