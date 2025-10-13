@@ -31,9 +31,9 @@ class Command(BaseCommand):
         for p in pesertas_lolos:
             contacts.append({"nama": p.nama, "nomor_wa": p.nomor_wa})
         # For testing, use a fixed contact list
-        contacts = [
-            {"nama": "Adi", "nomor_wa": "082213069594"},
-        ]
+        # contacts = [
+        #     {"nama": "Adi", "nomor_wa": "082213069594"},
+        # ]
         for c in contacts:
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
