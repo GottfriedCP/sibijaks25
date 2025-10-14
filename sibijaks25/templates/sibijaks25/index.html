@@ -46,9 +46,11 @@
     <section>
         <div id="main-links" class="d-flex justify-content-center gap-3 flex-wrap">
             {% if not request.user.is_authenticated and not request.session.peserta %}
+            {% comment %}
             <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:registrasi' %}" role="button">
                 Registrasi Tim<br>
             </a>
+            {% endcomment %}
             {% elif request.user.is_authenticated and request.session.peserta %}
             <a class="btn btn-kemkes btn-lg" href="{% url 'sibijaks25:naskah' %}" role="button">
                 Naskah Saya<br>
@@ -58,11 +60,14 @@
                 Naskah Peserta<br>
             </a>
             {% endif %}
-            <a class="btn btn-kemkes btn-lg" href="https://drive.google.com/drive/folders/1o1LVPo5f9L5747zqeoW5BKqJWFKcHdts?usp=sharing" role="button" target="_blank">
-                Panduan dan Template Naskah<br>
+            <a class="btn btn-kemkes btn-lg" href="https://drive.google.com/drive/folders/1V2borxK4NEk6cFatfpuwm08bmpenhCRq" role="button" target="_blank">
+                Panduan Naskah<br>
             </a>
             <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/" role="button" target="_blank">
                 Buku Hasil SSGI 2024 Dalam Angka<br>
+            </a>
+            <a class="btn btn-kemkes btn-lg" href="https://www.badankebijakan.kemkes.go.id/layanan-permintaan-data/" role="button" target="_blank">
+                Layanan Permintaan Data<br>
             </a>
         </div>
     </section>
@@ -77,6 +82,12 @@
         {% endfor %}
     </section>
     {% endif %}
+    <section class="my-5 text-center">
+        <div class="text-center fs-4">
+            Informasi bagi peserta yang lolos tahap seleksi konsep dikirimkan melalui nomor WhatsApp yang didaftarkan. Silakan ikuti petunjuk yang disampaikan panitia.<br><br>
+            Bagi peserta yang belum dinyatakan lolos, atas nama Panitia Sibijaks Awards 2025 kami ucapkan terima kasih dan apresiasi atas partisipasinya.
+        </div>
+    </section>
     {% comment %}
     <section class="my-5 text-center">
         <div class="text-center fs-4">
