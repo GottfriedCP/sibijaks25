@@ -75,12 +75,14 @@
                 Mohon unggah naskah <i>full text</i>, <b>format bebas</b>, namun memuat bagian-bagian mengacu pada instrumen penilaian<br>
                 <b><a href="https://drive.google.com/drive/folders/1V2borxK4NEk6cFatfpuwm08bmpenhCRq?usp=sharing" target="_blank">Klik untuk mengunduh instrumen penilaian</a></b><br><br>
                 <span class="text-bg-danger">Naskah yang diunggah tidak boleh memuat identitas peserta dan tim</span><br>
+                {% if masukans %}
                 Masukan dari reviewer:
                 <ol>
                     {% for m in masukans %}
                     <li><b>Reviewer {{ forloop.counter }}: </b>{{ m.komentar|default:"Tidak ada masukan" }}</li>
                     {% endfor %}
                 </ol>
+                {% endif %}
             </div>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
