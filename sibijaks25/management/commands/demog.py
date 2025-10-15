@@ -49,9 +49,9 @@ Yth. Ibu/Bapak {c['nama']}
 
 Salam Sehat
 
-Dalam rangka mengetahui dan memetakan latar belakang peserta SiBijaKs Awards 2025, kami memohon kesediaan Bapak/Ibu mengisi kuesioner singkat (3-5 menit).
+Dalam rangka mengetahui dan memetakan latar belakang peserta SiBijaKs Awards 2025, kami memohon kesediaan Ibu/Bapak mengisi kuesioner singkat (3-5 menit).
 
-Data Bapak/Ibu akan kami gunakan untuk pembuatan laporan statistik internal (agregat) dan terjaga kerahasiaannya.
+Data Ibu/Bapak akan kami gunakan untuk pembuatan laporan statistik internal (agregat) dan terjaga kerahasiaannya.
 
 Berikut link kuesioner:
 https://ls.simandat.web.id/285739?newtest=Y&lang=id
