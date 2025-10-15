@@ -42,7 +42,7 @@ class NaskahFTForm(forms.ModelForm):
     class Meta:
         model = Naskah
         fields = [
-            "naskah",
+            "judul", "naskah",
         ]
 
 
