@@ -14,14 +14,14 @@ DEVICE_ID = "7b7bb304e8173a8feb020ac49a707be2"
 class Command(BaseCommand):
     help = "Kirim pesan WA bagi peserta yang belum mengunggah naskah"
 
-    # def add_arguments(self, parser):
-    #     parser.add_argument("poll_ids", nargs="+", type=int)
-    #     # Named (optional) arguments
-    #     parser.add_argument(
-    #         "--delete",
-    #         action="store_true",
-    #         help="Delete poll instead of closing it",
-    #     )
+    def add_arguments(self, parser):
+        # parser.add_argument("poll_ids", nargs="+", type=int)
+        # Named (optional) arguments
+        parser.add_argument(
+            "--real",
+            action="store_true",
+            help="Send the blast message for real.",
+        )
 
     def handle(self, *args, **options):
         pesertas_lolos = Peserta.objects.annotate(
@@ -37,31 +37,27 @@ class Command(BaseCommand):
         for p in pesertas_lolos:
             contacts.append({"nama": p.nama, "nomor_wa": p.nomor_wa})
         # For testing, use a fixed contact list
-        # contacts = [
-        #     {"nama": "Adi", "nomor_wa": "082213069594"},
-        # ]
+        if not options["real"]:
+            contacts = [
+                {"nama": "Adi", "nomor_wa": "082213069594"},
+            ]
         for c in contacts:
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
             message = f"""
-Yth. Ibu/Bapak {c['nama']}.
+Yth. Ibu/Bapak {c['nama']}
 
-Kami ucapkan selamat atas naskah konsep policy brief/artikel imiah yang Ibu/Bapak kirimkan. Satu atau beberapa naskah telah dinyatakan *lolos seleksi* dan dapat dilanjutkan ke tahap berikutnya yaitu pengiriman naskah lengkap (full text). 
+Salam Sehat
 
-Langkah selanjutnya dapat kami sampaikan beberapa hal sebagai berikut:
+Dalam rangka mengetahui dan memetakan latar belakang peserta SiBijaKs Awards 2025, kami memohon kesediaan Bapak/Ibu mengisi kuesioner singkat (3-5 menit).
 
-1. Menindaklanjuti hasil penilaian dan mengunggah naskah full text pada website SiBijaKs Awards 2025.
-2. Panduan penulisan policy brief dan artikel ilmiah mengacu pada instrumen penilaian naskah, dapat diakses pada link https://drive.google.com/drive/folders/1V2borxK4NEk6cFatfpuwm08bmpenhCRq?usp=sharing 
-3. Kebutuhan data Survei Status Gizi Indonesia (SSGI) 2024 dapat diajukan melalui Portal Layanan Data Kementerian Kesehatan https://layanandata.kemkes.go.id/
-4. Tata cara permintaan data dapat diakses di https://www.badankebijakan.kemkes.go.id/layanan-permintaan-data/ 
-5. Batas waktu pengiriman naskah lengkap policy brief/artikel ilmiah pada *11 November 2025 pukul 23.59 WIB*
-6. Silakan mengikuti workshop analisis data SSGI 2024 pada tanggal 15-16 Oktober 2025 pada link: https://s.kemkes.go.id/WorkshopAnalisisDataSSGI2024
+Data Bapak/Ibu akan kami gunakan untuk pembuatan laporan statistik internal (agregat) dan terjaga kerahasiaannya.
 
-Kami tunggu kiriman naskah lengkap policy brief/artikel ilmiah terbaiknya dengan menggunakan data SSGI 2024 sebagai sumber data utama.
+Berikut link kuesioner:
+https://ls.simandat.web.id/285739?newtest=Y&lang=id
 
-Data SSGI 2024 Untuk Kebijakan Berkelanjutan
 ---
-Salam sehat,
+Terima kasih dan Salam sehat,
 Panitia SiBijaKs Awards 2025"""
 
             # Prepare the data payload for the API request
