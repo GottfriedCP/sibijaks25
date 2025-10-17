@@ -182,7 +182,8 @@ def unduh_rekap(request):
 
         # Write headers
         headers = ["ID Naskah", "Jenis Naskah", "Judul"]
-        headers.extend(["Ketua Tim", "Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
+        headers.extend(["Ketua Tim", "Nomor WA", "Email"])
+        headers.extend(["Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
         headers.extend(["Status", "Verifier 1", "Verifier 2"])
         # Reviewer Konsep
         headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
@@ -202,6 +203,8 @@ def unduh_rekap(request):
             row.extend(
                 [
                     naskah.peserta.nama,
+                    naskah.peserta.nomor_wa,
+                    naskah.peserta.email,
                     is_mahasiswa,
                     naskah.peserta.get_mahasiswa_display() if is_mahasiswa else "-",
                     naskah.peserta.pekerjaan or "-",
