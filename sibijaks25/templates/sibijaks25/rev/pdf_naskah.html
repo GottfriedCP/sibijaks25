@@ -1,0 +1,68 @@
+<script type="module">
+    // Import necessary functions from the pdfjs-dist module
+    import { getDocument, GlobalWorkerOptions } from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.296/build/pdf.min.mjs';
+
+    // Set the worker source path. This is crucial for PDF.js to function.
+    // The worker handles the heavy-lifting of parsing the PDF in a background thread.
+    // Replace '5.4.296' with the latest version number if you use a direct CDN link, 
+    // or use 'latest' if the CDN supports it.
+    GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs';
+
+    // 1. Define the PDF URL
+    // REPLACE THIS URL with your actual PDF URL
+    const pdfUrl = '{{ naskah.naskah.url }}';
+
+    // 2. Get the canvas element and its 2D context
+    const canvas = document.getElementById('pdf-canvas');
+    const context = canvas.getContext('2d');
+    const scale = 1.0; // Adjust rendering scale as needed
+
+    /**
+     * Renders a specific page of the PDF to the canvas.
+     * @param {number} pageNumber - The page number to render (1-indexed).
+     */
+    async function renderPage(pdf, pageNumber) {
+        try {
+            // Get the PDF page
+            const page = await pdf.getPage(pageNumber);
+
+            // Get the default viewport (with a specified scale)
+            const viewport = page.getViewport({ scale: scale });
+
+            // Set canvas dimensions to match the viewport dimensions
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Configure the rendering context
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport,
+            };
+
+            // Render the page on the canvas
+            await page.render(renderContext).promise;
+
+            console.log(`Page ${pageNumber} rendered successfully!`);
+
+        } catch (error) {
+            console.error(`Error rendering page ${pageNumber}:`, error);
+        }
+    }
+
+    // 3. Asynchronously load the PDF document
+    const loadingTask = getDocument(pdfUrl);
+
+    loadingTask.promise.then(
+        (pdf) => {
+            console.log('PDF document loaded.');
+            // Render the first page
+            renderPage(pdf, 1);
+        },
+        (reason) => {
+            // PDF loading error
+            console.error('Error loading PDF document:', reason);
+            alert('Failed to load PDF. Check the console for details.');
+        }
+    );
+
+</script>

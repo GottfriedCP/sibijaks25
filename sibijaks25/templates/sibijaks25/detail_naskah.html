@@ -14,8 +14,7 @@
             <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
         </ol>
     </nav>
-    <h1>Detail Naskah</h1>
-    <h2 class="fs-3">{{ naskah.judul }}</h2>
+    <h1 class="fs-2">{{ naskah.judul }}</h1>
     <div class="my-3">
         {% bootstrap_messages %}
     </div>
@@ -84,15 +83,21 @@
                 </ol>
                 {% endif %}
             </div>
-            <form method="POST" enctype="multipart/form-data">
+            <div class="alert alert-success" role="alert">
+                Anda telah mengunggah naskah full text. Anda dapat mengunggah ulang naskah menggunakan form di bawah
+            </div>
+            <form class="p-3" style="border: 1px solid grey;" method="POST" enctype="multipart/form-data">
+                <h4>Form Unggah Naskah Full Text</h4>
                 {% csrf_token %}
-                {% bootstrap_form form_naskah_ft %}
-                {% bootstrap_form form_naskah_kolaborator %}
+                {% bootstrap_form form %}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="noID" required>
                     <label class="form-check-label" for="noID">
                         Naskah yang saya unggah tidak mengandung identitas saya dan tim saya
                     </label>
+                </div>
+                <div class="my-3 text-info">
+                    Anda dapat mengunggah ulah naskah sebelum deadline.
                 </div>
                 <div class="mt-4 d-grid gap-2">
                     <button class="btn btn-kemkes" type="submit">Unggah Naskah Full Text</button>

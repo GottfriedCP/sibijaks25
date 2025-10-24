@@ -89,11 +89,12 @@
                         <th>Ketua Tim</th>
                         <th>Status</th>
                         <th>Jumlah Juri</th>
+                        <th>Full Text</th>
                         <th>Tindakan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for naskah, bisa_dinilai, jumlah_juri in naskahs %}
+                    {% for naskah, bisa_dinilai, jumlah_juri, unggah_ft in naskahs %}
                     <tr>
                         <td class="text-center">{{ naskah.id }}</td>
                         <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
@@ -110,6 +111,7 @@
                             {% endif %}
                         </td>
                         <td class="text-center">{{ jumlah_juri }}</td>
+                        <td class="text-center">{{ unggah_ft }}</td>
                         <td>
                             <!-- Tindakan -->
                             <div class="d-flex flex-wrap gap-2">

@@ -4,6 +4,7 @@
 {% block title_bl %}Detail Naskah{% endblock %}
 
 {% block header_bl %}
+
 {% endblock %}
 
 {% block body_bl %}
@@ -14,8 +15,7 @@
             <li class="breadcrumb-item active" aria-current="page">Detail Naskah</li>
         </ol>
     </nav>
-    <h1>Detail Naskah <code>ID {{ naskah.id }}</code></h1>
-    <h2 class="fs-3">{{ naskah.judul }}</h2>
+    <h1 class="fs-2">{{ naskah.judul }}</h1>
     <div class="my-3">
         {% bootstrap_messages %}
     </div>
@@ -23,6 +23,8 @@
         <div class="row">
             <div class="col-md-6">
                 <dl>
+                    <dt>ID Anonim</dt>
+                    <dd><code>{{ naskah.id }}</code></dd>
                     <dt>Jenis Naskah</dt>
                     <dd>{{ naskah.get_jenis_naskah_display }}</dd>
                 </dl>
@@ -35,28 +37,58 @@
             <h3>Konsep</h3>
             <div style="height: 512px; border: 1px solid gray;" class="p-3 overflow-auto">{{ naskah.abstrak|safe }}</div>
         </div>
+        {% if naskah.naskah %}
+        <!-- Naskah Lengkap (Full Text) -->
+        <div class="mt-5">
+            <h3>Naskah Lengkap (Full Text)</h3>
+            <embed src="{{ naskah.naskah.url }}" type="application/pdf" width="100%" height="600px" title="Naskah Full Text">
+        </div>
+        {% endif %}
     </div>
     <div class="mt-5" id="div-form-penilaian">
         {% if sudah_review %}
         <h4>Hasil Penilaian Konsep</h4>
         Bapak/Ibu telah menilai naskah ini.<br>
         Nilai total naskah ini: <b>{{ nilai_akhir }}</b><br>
-        Komentar: <b>{{ review.komentar|default:'-' }}</b><br>
-        Rekomendasi: <b>{{ status_lanjut }}</b>
+        Apakah full text masih sesuai konsep: <b>{{ status_lanjut|default:'-' }}</b><br>
+        Komentar: <b>{{ review.komentar2|default:'-' }}</b><br>
         {% else %}
         <h2 class="fs-3">Form Penilaian</h2>
         <form method="POST" action="{% url 'sibijaks25:rev_simpan_penilaian' %}" class="p-3" style="border: 1px solid grey;">
             {% csrf_token %}
             <p>Nama Reviewer: <b>{{ juri.nama }}</b></p>
-            <div class="alert alert-info">
-                <b>Untuk setiap komponen penilaian, mohon berikan nilai antara 1 sampai 5</b>
+            <p>Komentar pada tahap konsep: <b>{{ review.komentar|default:'-' }}</b></p>
+            <div class="mt-4 alert alert-info">
+                <b>Untuk setiap komponen penilaian, pilih nilai antara 1 sampai 5</b>
             </div>
             <input type="hidden" name="id_naskah" id="id_naskah" value="{{ naskah.id }}">
             {% if jenis_naskah == 'ai' %}
-            {% include 'sibijaks25/rev/form_ai.html' %}
+            {% include 'sibijaks25/rev/form_ai2.html' %}
             {% else %}
-            {% include 'sibijaks25/rev/form_pb.html' %}
+            {% include 'sibijaks25/rev/form_pb2.html' %}
             {% endif %}
+            <div class="my-3">
+                <label for="l" class="form-label">
+                    Apakah full text masih sesuai konsep?
+                    <small>
+                        
+                    </small>
+                </label>
+                <select name="l" id="l" class="form-select" required>
+                    <option value="" selected>Pilih salah satu</option>
+                    <option value="1">Ya</option>
+                    <option value="0">Tidak</option>
+                </select>
+            </div>
+            <div class="my-3">
+                <label for="k" class="form-label">
+                    Komentar (jika ada)
+                    <small>
+                        
+                    </small>
+                </label>
+                <textarea class="form-control" id="k" name="k" rows="3"></textarea>
+            </div>
             <p class="text-danger">Penilaian yang disimpan tidak dapat diubah.</p>
             <div class="d-grid gap-2">
                 <button type="submit" class="my-3 btn btn-secondary btn-kemkes">Simpan Penilaian</button>
@@ -73,7 +105,7 @@
         // {% if form_juri %}
         $('#id_juris').select2();
         // {% endif %}
-        // $('label').css('font-weight', 'bold');
+        $('label').css('font-weight', 'bold');
     });
 </script>
 {% endblock %}

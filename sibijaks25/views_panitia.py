@@ -34,7 +34,8 @@ def naskah(request):
         if juri.is_supersubstansi:
             bisa_dinilai = n.status_naskah != 666 and not bool(n.verifier2)
         jumlah_juri = n.juris.count()
-        naskahs_list.append((n, bisa_dinilai, jumlah_juri))
+        unggah_ft = "Sudah" if bool(n.naskah) else "Belum"
+        naskahs_list.append((n, bisa_dinilai, jumlah_juri, unggah_ft))
 
     reviewers = (
         Juri.objects.filter(is_panitia=False)
@@ -186,10 +187,10 @@ def unduh_rekap(request):
         headers.extend(["Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
         headers.extend(["Status", "Verifier 1", "Verifier 2"])
         # Reviewer Konsep
+        headers.extend(["Selesai Review", "Nilai avg", "Predikat"])
         headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
         headers.extend([f"Reviewer 2", "Skor", "Komentar", "Rekomendasi"])
         # headers.extend([f"Reviewer 3", "Skor", "Komentar", "Rekomendasi"])
-        headers.extend(["Selesai Review Konsep", "Nilai avg", "Predikat"])
         ws.append(headers)
 
         naskahs = Naskah.objects.select_related("peserta")
@@ -211,38 +212,40 @@ def unduh_rekap(request):
                     naskah.peserta.institusi,
                 ]
             )
-            row.extend(
-                [
-                    status, naskah.verifier1, naskah.verifier2
-                ]
-            )
+            row.extend([status, naskah.verifier1, naskah.verifier2])
             # Reviewer Konsep (data)
             total_nilai = 0
             selesai_semua = True
+            list_detail_penilaian = []
             for r in naskah.reviews2.all():
-                total_nilai += r.total
-                rekomendasi = "Lanjut FT"
-                if r.total == 0:
+                total_nilai += r.total2
+                rekomendasi = "Lanjut"
+                if r.total2 == 0:
                     selesai_semua = False
                     rekomendasi = "-"
-                elif r.total > 0 and not r.lanjut:
+                elif r.total2 > 0 and not r.lanjut:
                     rekomendasi = "Tidak lanjut"
-                row.extend([
-                    r.juri.nama,
-                    "-" if r.total == 0 else r.total,
-                    r.komentar or "-",
-                    rekomendasi,
-                ])
+                list_detail_penilaian.extend(
+                    [
+                        r.juri.nama,
+                        "-" if r.total2 == 0 else r.total2,
+                        r.komentar2 or "-",
+                        rekomendasi,
+                    ]
+                )
 
             if naskah.status_naskah != 666 and selesai_semua:
-                nilai_avg = Decimal(total_nilai)/Decimal(JUMLAH_REVIEWER)
-                nilai_avg = nilai_avg.quantize(Decimal('0.00'))
+                nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
+                nilai_avg = nilai_avg.quantize(Decimal("0.00"))
                 predikat = "Kurang Baik"
                 if nilai_avg > Decimal(400):
                     predikat = "Sangat Baik"
                 elif nilai_avg > Decimal(200):
                     predikat = "Baik"
                 row.extend(["Sudah", nilai_avg, predikat])
+            else:
+                row.extend(["", "", ""])
+            row.extend(list_detail_penilaian)
             ws.append(row)
 
         response = HttpResponse(

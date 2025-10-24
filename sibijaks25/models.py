@@ -356,6 +356,7 @@ class Review2(TimestampedModel):
     s9 = models.IntegerField(default=0)
     s10 = models.IntegerField(default=0)
     komentar = models.TextField(blank=True, null=True)
+    komentar2 = models.TextField(blank=True)
     total = models.IntegerField(default=0)
     total2 = models.IntegerField(default=0)
     lanjut = models.BooleanField(default=False)

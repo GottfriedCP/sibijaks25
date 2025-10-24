@@ -17,11 +17,11 @@ def naskah(request):
     """laman daftar naskah untuk panitia."""
     juri = get_object_or_404(Juri, id=request.session["panitia"]["id"])
     revs = Review2.objects.filter(juri=juri).select_related("naskah")
-    jml_naskah_todo = revs.filter(total__lt=1).count()
+    jml_naskah_todo = revs.filter(total2__lt=1).count()
     naskahs_list = []
     for r in revs:
-        bisa_dinilai = r.total < 1
-        naskahs_list.append((r.naskah, bisa_dinilai, r.total))
+        bisa_dinilai = r.total2 < 1
+        naskahs_list.append((r.naskah, bisa_dinilai, r.total2))
     context = {
         "juri": juri,
         "naskahs": naskahs_list,
@@ -44,11 +44,9 @@ def detail_naskah(request, id):
         "juri": juri,
         "jenis_naskah": jenis_naskah,
         "review": rev,
-        "sudah_review": rev.total > 0,
-        "nilai_akhir": rev.total,
-        "status_lanjut": (
-            "Lanjut full paper" if rekomendasi else "Tidak lanjut full paper"
-        ),
+        "sudah_review": rev.total2 > 0,
+        "nilai_akhir": rev.total2,
+        "status_lanjut": ("Ya" if rekomendasi else "Tidak"),
     }
     return render(request, "sibijaks25/rev/detail_naskah.html", context)
 
@@ -67,6 +65,9 @@ def simpan_penilaian(request):
         r4 = int(request.POST.get("r4", 0))
         r5 = int(request.POST.get("r5", 0))
         r6 = int(request.POST.get("r6", 0))
+        r7 = int(request.POST.get("r7", 0))
+        r8 = int(request.POST.get("r8", 0))
+        r9 = int(request.POST.get("r9", 0))
         k = str(request.POST.get("k", "")).strip()
         l = bool(int(request.POST.get("l", 0)))
         rev = get_object_or_404(Review2, juri=juri, naskah=naskah)
@@ -76,9 +77,12 @@ def simpan_penilaian(request):
         rev.s4 = r4
         rev.s5 = r5
         rev.s6 = r6
-        rev.komentar = k
+        rev.s7 = r7
+        rev.s8 = r8
+        rev.s9 = r9
+        rev.komentar2 = k
         rev.lanjut = l
-        rev.save()
+        rev.save()  # pada tahap FT, save() akan memperbarui total2
         messages.success(request, "Penilaian berhasil disimpan.")
     return redirect("sibijaks25:rev_naskah")
     # return redirect("sibijaks25:rev_detail_naskah", id=naskah.id)

@@ -50,11 +50,13 @@
         </div>
     </div>
     <div class="my-3 d-flex flex-wrap gap-3">
+        {% comment %}
         {% if ada_kolaborator and ada_pasfoto %}
         <a class="btn btn-kemkes" href="{% url 'sibijaks25:tambah_naskah' %}">Unggah Naskah</a>
         {% else %}
         <a class="btn btn-kemkes disabled">Unggah Naskah</a>
         {% endif %}
+        {% endcomment %}
         <a class="btn btn-kemkes" href="{% url 'sibijaks25:tambah_kolaborator' %}">Kolaborator Baru</a>
         <a class="btn btn-secondary" target="_blank" href="https://drive.google.com/drive/folders/1o1LVPo5f9L5747zqeoW5BKqJWFKcHdts?usp=sharing">Panduan dan Template Naskah</a>
         <a class="btn btn-secondary" target="_blank" href="https://www.badankebijakan.kemkes.go.id/survei-status-gizi-indonesia-ssgi-2024/">Buku Hasil SSGI 2024 Dalam Angka</a>

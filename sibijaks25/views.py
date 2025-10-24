@@ -102,7 +102,7 @@ def naskah(request):
     for n in naskahs:
         status = "Gugur"
         if n.status_naskah == 100 and n.naskah:
-            status = "Penilaian Full Text"
+            status = "Menunggu Review"
         elif n.status_naskah == 100:
             status = "Belum Unggah"
         naskahs_list.append((n, status))
@@ -208,20 +208,15 @@ def detail_naskah(request, id):
         Peserta.objects.prefetch_related("naskahs"), nomor_wa=wa, email=email
     )
     naskah = get_object_or_404(peserta.naskahs, id=id)
-    form_naskah_ft = NaskahFTForm(instance=naskah)
-    form_naskah_kolaborator = NaskahKolaboratorForm(peserta=peserta, instance=naskah)
+    form = NaskahFTForm(peserta=peserta, instance=naskah)
     # masukan dari reviewer
     masukans = Review2.objects.filter(naskah=naskah)
     if request.method == "POST":
-        form_naskah_ft = NaskahFTForm(
+        form = NaskahFTForm(
             data=request.POST, files=request.FILES, instance=naskah
         )
-        form_naskah_kolaborator = NaskahKolaboratorForm(
-            request.POST, peserta=peserta, instance=naskah
-        )
-        if form_naskah_ft.is_valid() and form_naskah_kolaborator.is_valid():
-            form_naskah_ft.save()
-            form_naskah_kolaborator.save()
+        if form.is_valid():
+            form.save()
             messages.success(request, "Naskah berhasil disimpan.")
             return redirect("sibijaks25:detail_naskah", id=id)
         else:
@@ -230,8 +225,7 @@ def detail_naskah(request, id):
             )
     context = {
         "naskah": naskah,
-        "form_naskah_ft": form_naskah_ft,
-        "form_naskah_kolaborator": form_naskah_kolaborator,
+        "form": form,
         "masukans": masukans,
     }
     return render(request, "sibijaks25/detail_naskah.html", context)
