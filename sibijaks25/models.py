@@ -259,6 +259,8 @@ class Naskah(TimestampedModel):
         blank=True,
         # help_text='Juri yang melakukan review tahap 2 untuk naskah ini.',
     )
+    # apakah naskah ini sudah meminta data dari portal layanan data
+    meminta_data = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "Naskah"
