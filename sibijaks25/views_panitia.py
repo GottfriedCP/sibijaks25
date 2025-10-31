@@ -186,6 +186,7 @@ def unduh_rekap(request):
         headers.extend(["Ketua Tim", "Nomor WA", "Email"])
         headers.extend(["Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
         headers.extend(["Status", "Verifier 1", "Verifier 2"])
+        headers.extend(["Meminta Data?", "Hasil Permintaan Data", "Full text"])
         # Reviewer Konsep
         headers.extend(["Selesai Review", "Nilai avg", "Predikat"])
         headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
@@ -213,6 +214,13 @@ def unduh_rekap(request):
                 ]
             )
             row.extend([status, naskah.verifier1, naskah.verifier2])
+            row.extend(
+                [
+                    "Ya" if naskah.meminta_data else "",
+                    "",
+                    "Ya" if bool(naskah.naskah) else "",
+                ]
+            )
             # Reviewer Konsep (data)
             total_nilai = 0
             selesai_semua = True
