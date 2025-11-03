@@ -12,7 +12,7 @@ DEVICE_ID = "7b7bb304e8173a8feb020ac49a707be2"
 
 
 class Command(BaseCommand):
-    help = "Kirim pesan WA berisi formulir untuk mengisi data latar belakang."
+    help = "Kirim pesan WA reminder unggah naskah full text."
 
     def add_arguments(self, parser):
         # parser.add_argument("poll_ids", nargs="+", type=int)
@@ -24,12 +24,17 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        pesertas_lolos = Peserta.objects.annotate(
+        pesertas_lolos = Peserta.objects.prefetch_related("naskahs")
+        pesertas_lolos = pesertas_lolos.annotate(
             jml_naskah=Count("naskahs", filter=Q(naskahs__status_naskah=100))
-        ).filter(jml_naskah__gte=1)
+        )
+        pesertas_lolos = pesertas_lolos.filter(jml_naskah__gte=1)
+        pesertas_lolos = pesertas_lolos.filter(
+            Q(naskahs__naskah__isnull=True) | Q(naskahs__naskah="")
+        )
         self.stdout.write(
             self.style.WARNING(
-                f"{pesertas_lolos.count()} tim lolos tahap review konsep."
+                f"{pesertas_lolos.count()} tim lolos ke tahap review full text dan belum unggah naskah FT."
             )
         )
         # return
@@ -45,20 +50,27 @@ class Command(BaseCommand):
             nomor_wa = c["nomor_wa"]
             # Create a personalized message for each contact
             message = f"""
-Yth. Ibu/Bapak {c['nama']}
+🔔🔔📜📝🔊🔊
 
-Salam Sehat
+*H-8️⃣ TENGGAT WAKTU SUBMISI NASKAH LENGKAP POLICY BRIEF/ARTIKEL ILMIAH SIBIJAKS AWARDS 2025*
 
-Dalam rangka mengetahui dan memetakan latar belakang peserta SiBijaKs Awards 2025, kami memohon kesediaan Ibu/Bapak mengisi kuesioner singkat (3-5 menit).
+Yth. Bapak/Ibu Peserta SiBijaKs Awards 2025,
 
-Data Ibu/Bapak akan kami gunakan untuk pembuatan laporan statistik internal (agregat) dan terjaga kerahasiaannya.
+Kami informasikan kembali bahwa tenggat waktu pengiriman naskah lengkap policy brief dan artikel ilmiah SiBijaKs Awards 2025 adalah *Selasa, 11 November 2025 Pukul 23.59 WIB*.
 
-Berikut link kuesioner:
-https://ls.simandat.web.id/285739?newtest=Y&lang=id
+_Menulis naskah perlu ketekunan,_
+_Disusun rapi penuh makna dan bukti,_
+_Ayo segera kirimkan tulisan,_
+_Policy brief dan artikelnya kami nanti_
+
+_Deadline datang tak kenal iba_
+_Yang belum submit Ayo segera!_
 
 ---
-Terima kasih dan Salam sehat,
-Panitia SiBijaKs Awards 2025"""
+Salam sehat penuh semangat,
+Panitia SiBijaKs Awards 2025
+
+🔥🔥🚀🚀"""
 
             # Prepare the data payload for the API request
             payload = {
