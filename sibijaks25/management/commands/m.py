@@ -11,12 +11,14 @@ import csv
 import time
 
 # CEK VARS DI BAWAH SEBELUM SEND
-SUBYEK = "Undangan Coaching Clinic SiBijaKs Awards 2025"
-TEMPLATE_PATH = "emails/m4.html"
+SUBYEK = "Konferensi SiBijaKs Awards 2025"
+TEMPLATE_PATH = "emails/m5.html"
+FILEPATH = settings.BASE_DIR / "static" / "file" / "Pemberitahuan_Pelaksanaan_Konferensi.pdf"
+MIMETYPE="application/pdf"
 
 
 class Command(BaseCommand):
-    help = "Kirim email undangan coaching clinic."
+    help = "Kirim email "
 
     def add_arguments(self, parser):
         # parser.add_argument("poll_ids", nargs="+", type=int)
@@ -74,12 +76,14 @@ class Command(BaseCommand):
                     from_email="no-reply@kemkes.go.id",
                     to=[c["email"]],  # Hanya satu penerima per objek EmailMessage
                     connection=connection,  # Kaitkan objek pesan dengan koneksi yang sama
-                    # reply_to=[],
+                    reply_to=["no-reply@kemkes.go.id"],
                 )
                 msg.content_subtype = "html"  # Set konten sebagai HTML
                 msg.attach_alternative(
                     html_message, "text/html"
                 )  # Sisipkan konten HTML
+                if FILEPATH:
+                    msg.attach_file(FILEPATH, MIMETYPE)
 
                 emails.append(msg)
 
@@ -89,6 +93,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"\nFinished sending {jumlah_terkirim} emails to all contacts."
+                f"\nFinished sending {jumlah_terkirim} emails."
             )
         )
