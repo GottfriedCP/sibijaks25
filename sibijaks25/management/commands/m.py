@@ -11,9 +11,10 @@ import csv
 import time
 
 # CEK VARS DI BAWAH SEBELUM SEND
-SUBYEK = "Konferensi SiBijaKs Awards 2025"
-TEMPLATE_PATH = "emails/m5.html"
-FILEPATH = settings.BASE_DIR / "static" / "file" / "Pemberitahuan_Pelaksanaan_Konferensi.pdf"
+SUBYEK = "REKAMAN ZOOM Coaching Clinic SiBijaKs Awards 2025"
+TEMPLATE_PATH = "emails/m6.html"
+# FILEPATH = settings.BASE_DIR / "static" / "file" / "Pemberitahuan_Pelaksanaan_Konferensi.pdf"
+FILEPATH = False
 MIMETYPE="application/pdf"
 
 
