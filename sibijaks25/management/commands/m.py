@@ -11,8 +11,8 @@ import csv
 import time
 
 # CEK VARS DI BAWAH SEBELUM SEND
-SUBYEK = "Reminder H-4 SiBijaKs Awards 2025"
-TEMPLATE_PATH = "emails/m7.html"
+SUBYEK = "Reminder H-1 SiBijaKs Awards 2025"
+TEMPLATE_PATH = "emails/m8.html"
 # FILEPATH = settings.BASE_DIR / "static" / "file" / "Pemberitahuan_Pelaksanaan_Konferensi.pdf"
 FILEPATH = False
 MIMETYPE="application/pdf"
