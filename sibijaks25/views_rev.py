@@ -17,6 +17,8 @@ def naskah(request):
     """laman daftar naskah untuk panitia."""
     juri = get_object_or_404(Juri, id=request.session["panitia"]["id"])
     revs = Review2.objects.filter(juri=juri).select_related("naskah")
+    # hanya munculkan entri yang sudah lengkap dengan full text
+    revs = revs.exclude(naskah__naskah="")
     jml_naskah_todo = revs.filter(total2__lt=1).count()
     naskahs_list = []
     for r in revs:
