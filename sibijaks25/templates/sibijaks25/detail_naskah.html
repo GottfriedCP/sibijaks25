@@ -72,7 +72,7 @@
             <embed src="{{ naskah.naskah.url }}" type="application/pdf" width="100%" height="600px" title="Naskah Full Text">
         </div>
         {% endif %}
-        {% if naskah.status_naskah == 100 %}
+        {% if naskah.status_naskah == 100 and form %}
         <!-- Form Naskah Full Text -->
         <div class="mt-5">
             <h3>Naskah Full Text</h3>
@@ -90,9 +90,9 @@
                 </ol>
                 {% endif %}
             </div>
-            <div class="alert alert-success" role="alert">
+            <!-- <div class="alert alert-success" role="alert">
                 Anda telah mengunggah naskah full text. Anda dapat mengunggah ulang naskah menggunakan form di bawah
-            </div>
+            </div> -->
             <form class="p-3" style="border: 1px solid grey;" method="POST" enctype="multipart/form-data">
                 <h4>Form Unggah Naskah Full Text</h4>
                 {% csrf_token %}

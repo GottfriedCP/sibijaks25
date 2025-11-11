@@ -11,7 +11,7 @@ from .forms import (
     NaskahFTForm,
     KolaboratorForm,
 )
-from .helpers import _cek_deadline
+from .helpers import _cek_deadline, _is_overdate_ft
 from .models import Banner, Countdown, Naskah, Peserta, Review2
 
 
@@ -225,7 +225,8 @@ def detail_naskah(request, id):
             )
     context = {
         "naskah": naskah,
-        "form": form,
+        # "form": form,
+        "form": False,  # jangan render form unggah naskah FT
         "masukans": masukans,
     }
     return render(request, "sibijaks25/detail_naskah.html", context)
