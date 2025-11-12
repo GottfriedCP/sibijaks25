@@ -211,7 +211,8 @@ def detail_naskah(request, id):
     form = NaskahFTForm(peserta=peserta, instance=naskah)
     # masukan dari reviewer
     masukans = Review2.objects.filter(naskah=naskah)
-    if request.method == "POST":
+    if request.method == "POST" and not _is_overdate_ft():
+        # jangan proses form unggah naskah FT paska overdate
         form = NaskahFTForm(
             data=request.POST, files=request.FILES, instance=naskah
         )
