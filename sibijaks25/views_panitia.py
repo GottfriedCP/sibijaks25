@@ -40,7 +40,7 @@ def naskah(request):
     reviewers = (
         Juri.objects.filter(is_panitia=False)
         .prefetch_related("naskahs")
-        .order_by("nama")
+        .order_by("jenis_naskah", "nama")
     )
     reviewers_list = []
     for r in reviewers:
