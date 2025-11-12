@@ -8,7 +8,7 @@ from .decorators import peserta_session_required, staff_required
 from .forms import NaskahJuriForm
 from .models import Banner, Juri, Naskah, Peserta, Review1, Review2
 
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from environs import env
 from openpyxl import Workbook
@@ -243,7 +243,10 @@ def unduh_rekap(request):
                 )
 
             if naskah.status_naskah != 666 and selesai_semua:
-                nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
+                try:
+                    nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
+                except InvalidOperation as e:
+                    nilai_avg = Decimal(1)
                 nilai_avg = nilai_avg.quantize(Decimal("0.00"))
                 predikat = "Kurang Baik"
                 if nilai_avg > Decimal(400):
