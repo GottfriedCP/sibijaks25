@@ -11,15 +11,15 @@ import csv
 import time
 
 # CEK VARS DI BAWAH SEBELUM SEND
-SUBYEK = "Reminder H-1 SiBijaKs Awards 2025"
-TEMPLATE_PATH = "emails/m8.html"
+SUBYEK = "Pengiriman Naskah Lengkap SIBIJAKS AWARDS 2025"
+TEMPLATE_PATH = "emails/m9.html"
 # FILEPATH = settings.BASE_DIR / "static" / "file" / "Pemberitahuan_Pelaksanaan_Konferensi.pdf"
 FILEPATH = False
 MIMETYPE="application/pdf"
 
 
 class Command(BaseCommand):
-    help = "Kirim email "
+    help = "Kirim email"
 
     def add_arguments(self, parser):
         # parser.add_argument("poll_ids", nargs="+", type=int)
@@ -35,13 +35,15 @@ class Command(BaseCommand):
         template_path = TEMPLATE_PATH
 
         pesertas_lolos = Peserta.objects.prefetch_related("naskahs")
+        # query peserta yang ada naskah lolos minimal 1
         pesertas_lolos = pesertas_lolos.annotate(
             jml_naskah=Count("naskahs", filter=Q(naskahs__status_naskah=100))
         )
         pesertas_lolos = pesertas_lolos.filter(jml_naskah__gte=1)
-        # pesertas_lolos = pesertas_lolos.filter(
-        #     Q(naskahs__naskah__isnull=True) | Q(naskahs__naskah="")
-        # )
+        # query peserta yang belum unggah naskah FT
+        pesertas_lolos = pesertas_lolos.filter(
+            Q(naskahs__naskah__isnull=True) | Q(naskahs__naskah="")
+        )
         self.stdout.write(
             self.style.WARNING(
                 f"{pesertas_lolos.count()} tim lolos ke tahap review full text."
