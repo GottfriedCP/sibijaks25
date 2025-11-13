@@ -243,6 +243,8 @@ class Naskah(TimestampedModel):
     status_naskah = models.IntegerField(
         choices=STATUS_NASKAH_CHOICES, default=100, verbose_name="Status Naskah"
     )
+    # tandai naskah ini terlambat, tapi masih diterima
+    terlambat = models.BooleanField(default=False)
     # Variabel skrining
     s1 = models.BooleanField(default=False)
     s2 = models.BooleanField(default=False)

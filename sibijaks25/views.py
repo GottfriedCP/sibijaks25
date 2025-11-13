@@ -211,13 +211,13 @@ def detail_naskah(request, id):
     form = NaskahFTForm(peserta=peserta, instance=naskah)
     # masukan dari reviewer
     masukans = Review2.objects.filter(naskah=naskah)
-    if request.method == "POST" and not _is_overdate_ft():
+    if request.method == "POST":  # and not _is_overdate_ft():
         # jangan proses form unggah naskah FT paska overdate
-        form = NaskahFTForm(
-            data=request.POST, files=request.FILES, instance=naskah
-        )
+        form = NaskahFTForm(data=request.POST, files=request.FILES, instance=naskah)
         if form.is_valid():
-            form.save()
+            n = form.save(commit=False)
+            n.terlambat = _is_overdate_ft()
+            n.save()
             messages.success(request, "Naskah berhasil disimpan.")
             return redirect("sibijaks25:detail_naskah", id=id)
         else:
@@ -226,8 +226,8 @@ def detail_naskah(request, id):
             )
     context = {
         "naskah": naskah,
-        # "form": form,
-        "form": False,  # jangan render form unggah naskah FT
+        "form": form if naskah.naskah == "" else False,
+        # "form": False,  # jangan render form unggah naskah FT
         "masukans": masukans,
     }
     return render(request, "sibijaks25/detail_naskah.html", context)
