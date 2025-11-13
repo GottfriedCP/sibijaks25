@@ -58,6 +58,11 @@
             {% csrf_token %}
             <p>Nama Reviewer: <b>{{ juri.nama }}</b></p>
             <p>Komentar pada tahap konsep: <b>{{ review.komentar|default:'-' }}</b></p>
+            {% if naskah.terlambat %}
+            <div class="alert alert-warning">
+                <b>Naskah ini dikirimkan peserta melebihi batas waktu yang ditentukan</b>
+            </div>
+            {% endif %}
             <div class="mt-4 alert alert-info">
                 <b>Untuk setiap komponen penilaian, pilih nilai antara 1 sampai 5</b>
             </div>
