@@ -40,6 +40,7 @@ class Command(BaseCommand):
             jml_naskah=Count("naskahs", filter=Q(naskahs__status_naskah=100))
         )
         pesertas_lolos = pesertas_lolos.filter(jml_naskah__gte=1)
+        self.stdout.write(f"{pesertas_lolos.count()} peserta")
         # query peserta yang belum unggah naskah FT
         pesertas_lolos = pesertas_lolos.filter(
             Q(naskahs__naskah__isnull=True) | Q(naskahs__naskah="")
