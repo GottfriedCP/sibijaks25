@@ -191,6 +191,7 @@ def unduh_rekap(request):
         headers.extend(["Meminta Data?", "Hasil Permintaan Data", "Full text"])
         # Reviewer Konsep
         headers.extend(["Selesai Review", "Nilai avg", "Predikat"])
+        headers.extend(["Terlambat"])
         headers.extend([f"Reviewer 1", "Skor", "Komentar", "Rekomendasi"])
         headers.extend([f"Reviewer 2", "Skor", "Komentar", "Rekomendasi"])
         # headers.extend([f"Reviewer 3", "Skor", "Komentar", "Rekomendasi"])
@@ -223,7 +224,7 @@ def unduh_rekap(request):
                     "Ya" if bool(naskah.naskah) else "",
                 ]
             )
-            # Reviewer Konsep (data)
+            # Reviewer Konsep (data), di-append ke row terakhiran
             total_nilai = 0
             selesai_semua = True
             list_detail_penilaian = []
@@ -258,6 +259,7 @@ def unduh_rekap(request):
                 row.extend(["Sudah", nilai_avg, predikat])
             else:
                 row.extend(["", "", ""])
+            row.extend(["Ya" if naskah.terlambat else ""])
             row.extend(list_detail_penilaian)
             ws.append(row)
 
