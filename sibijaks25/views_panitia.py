@@ -221,7 +221,7 @@ def unduh_rekap(request):
                 [
                     "Ya" if naskah.meminta_data else "",
                     "",
-                    "Ya" if bool(naskah.naskah) else "",
+                    f"https://sibijaks.bkpk.kemkes.go.id{naskah.naskah.url}" if naskah.naskah else "",
                 ]
             )
             # Reviewer Konsep (data), di-append ke row terakhiran
