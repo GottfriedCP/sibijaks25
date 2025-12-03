@@ -102,7 +102,7 @@ def naskah(request):
     for n in naskahs:
         status = "Gugur"
         if n.status_naskah == 100 and n.naskah:
-            status = "Menunggu Review"
+            status = "Menunggu Hasil"
         elif n.status_naskah == 100:
             status = "Belum Unggah"
         naskahs_list.append((n, status))
