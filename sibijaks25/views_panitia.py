@@ -13,6 +13,8 @@ from decimal import Decimal, InvalidOperation
 from environs import env
 from openpyxl import Workbook
 
+import os
+
 env.read_env()
 
 
@@ -187,7 +189,7 @@ def unduh_rekap(request):
         headers = ["ID Naskah", "Jenis Naskah", "Judul"]
         headers.extend(["Ketua Tim", "Nomor WA", "Email"])
         headers.extend(["Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
-        headers.extend(["Status", "Verifier 1", "Verifier 2"])
+        headers.extend(["Status", "File Konsep", "Verifier 1", "Verifier 2"])
         headers.extend(["Meminta Data?", "Hasil Permintaan Data", "Full text"])
         # Reviewer Konsep
         headers.extend(["Selesai Review", "Nilai avg", "Predikat"])
@@ -216,7 +218,11 @@ def unduh_rekap(request):
                     naskah.peserta.institusi,
                 ]
             )
-            row.extend([status, naskah.verifier1, naskah.verifier2])
+            try:
+                file_abstrak = str(os.path.basename(naskah.file_abstrak.name))
+            except:
+                file_abstrak = "-"
+            row.extend([status, file_abstrak, naskah.verifier1, naskah.verifier2])
             row.extend(
                 [
                     "Ya" if naskah.meminta_data else "",
