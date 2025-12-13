@@ -46,7 +46,7 @@ def naskah(request):
     )
     reviewers_list = []
     for r in reviewers:
-        jml_naskah_selesai = Review2.objects.filter(juri=r, total2__gt=0).count()
+        jml_naskah_selesai = Review2.objects.filter(juri=r, total3__gt=0).count()
         jml_naskah = r.naskahs.count()
         selesai = "Ya" if jml_naskah_selesai == jml_naskah else "Belum"
         # perhitungkan juga reviewer yang menganggur
