@@ -223,7 +223,7 @@ def unduh_rekap(request):
             kolaborators = []
             for k in naskah.kolaborators.all():
                 kolaborators.append(k.nama)
-            row.extend([", ".join(kolaborators)])
+            row.extend(["| ".join(kolaborators)])
 
             try:
                 file_abstrak = str(os.path.basename(naskah.file_abstrak.name))
