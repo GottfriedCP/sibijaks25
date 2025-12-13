@@ -242,18 +242,18 @@ def unduh_rekap(request):
             selesai_semua = True
             list_detail_penilaian = []
             for r in naskah.reviews2.all():
-                total_nilai += r.total2
+                total_nilai += r.total3
                 rekomendasi = "Lanjut"
-                if r.total2 == 0:
+                if r.total3 == 0:
                     selesai_semua = False
                     rekomendasi = "-"
-                elif r.total2 > 0 and not r.lanjut:
+                elif r.total3 > 0 and not r.lanjut:
                     rekomendasi = "Tidak lanjut"
                 list_detail_penilaian.extend(
                     [
                         r.juri.nama,
-                        "-" if r.total2 == 0 else r.total2,
-                        r.komentar2 or "-",
+                        "-" if r.total3 == 0 else r.total3,
+                        r.komentar3 or "-",
                         rekomendasi,
                     ]
                 )

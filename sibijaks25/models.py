@@ -361,8 +361,10 @@ class Review2(TimestampedModel):
     s10 = models.IntegerField(default=0)
     komentar = models.TextField(blank=True, null=True)
     komentar2 = models.TextField(blank=True)
+    komentar3 = models.TextField(blank=True)
     total = models.IntegerField(default=0)
     total2 = models.IntegerField(default=0)
+    total3 = models.IntegerField(default=0)
     lanjut = models.BooleanField(default=False)
 
     class Meta:
@@ -374,7 +376,7 @@ class Review2(TimestampedModel):
         return f"Review {self.juri.nama} - {self.naskah.judul}"
 
     def save(self, *args, **kwargs):
-        self.total2 = (
+        self.total3 = (
             self.s1
             + self.s2
             + self.s3
