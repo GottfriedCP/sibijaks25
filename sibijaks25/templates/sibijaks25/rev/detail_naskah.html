@@ -47,31 +47,25 @@
     </div>
     <div class="mt-5" id="div-form-penilaian">
         {% if sudah_review %}
-        <h4>Hasil Penilaian Konsep</h4>
+        <h4>Hasil Penilaian</h4>
         Bapak/Ibu telah menilai naskah ini.<br>
         Nilai total naskah ini: <b>{{ nilai_akhir }}</b><br>
-        Apakah full text masih sesuai konsep: <b>{{ status_lanjut|default:'-' }}</b><br>
-        Komentar: <b>{{ review.komentar2|default:'-' }}</b><br>
+        Komentar: <b>{{ review.komentar3|default:'-' }}</b><br>
         {% else %}
         <h2 class="fs-3">Form Penilaian</h2>
         <form method="POST" action="{% url 'sibijaks25:rev_simpan_penilaian' %}" class="p-3" style="border: 1px solid grey;">
             {% csrf_token %}
             <p>Nama Reviewer: <b>{{ juri.nama }}</b></p>
-            <p>Komentar pada tahap konsep: <b>{{ review.komentar|default:'-' }}</b></p>
-            {% if naskah.terlambat %}
-            <div class="alert alert-warning">
-                <b>Naskah ini dikirimkan peserta melebihi batas waktu yang ditentukan</b>
-            </div>
-            {% endif %}
             <div class="mt-4 alert alert-info">
                 <b>Untuk setiap komponen penilaian, pilih nilai antara 1 sampai 5</b>
             </div>
             <input type="hidden" name="id_naskah" id="id_naskah" value="{{ naskah.id }}">
             {% if jenis_naskah == 'ai' %}
-            {% include 'sibijaks25/rev/form_ai2.html' %}
+            {% include 'sibijaks25/rev/form_presentasi.html' %}
             {% else %}
-            {% include 'sibijaks25/rev/form_pb2.html' %}
+            {% include 'sibijaks25/rev/form_presentasi.html' %}
             {% endif %}
+            {% comment %}
             <div class="my-3">
                 <label for="l" class="form-label">
                     Apakah full text masih sesuai konsep?
@@ -85,6 +79,7 @@
                     <option value="0">Tidak</option>
                 </select>
             </div>
+            {% endcomment %}
             <div class="my-3">
                 <label for="k" class="form-label">
                     Komentar (jika ada)
