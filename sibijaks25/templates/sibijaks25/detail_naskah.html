@@ -72,6 +72,7 @@
             <embed src="{{ naskah.naskah.url }}" type="application/pdf" width="100%" height="600px" title="Naskah Full Text">
         </div>
         {% endif %}
+        {% comment %}
         {% if naskah.status_naskah == 100 and form %}
         <!-- Form Naskah Full Text -->
         <div class="mt-5">
@@ -112,6 +113,7 @@
             </form>
         </div>
         {% endif %}
+        {% endcomment %}
     </div>
 </div>
 {% endblock %}
