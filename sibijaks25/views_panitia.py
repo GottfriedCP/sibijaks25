@@ -189,6 +189,7 @@ def unduh_rekap(request):
         headers = ["ID Naskah", "Jenis Naskah", "Judul"]
         headers.extend(["Ketua Tim", "Nomor WA", "Email"])
         headers.extend(["Mahasiswa", "Mahasiswa Jenjang", "Profesi", "Instansi"])
+        headers.extend(["Kolaborator"])
         headers.extend(["Status", "File Konsep", "Verifier 1", "Verifier 2"])
         headers.extend(["Meminta Data?", "Hasil Permintaan Data", "Full text"])
         # Reviewer Konsep
@@ -218,6 +219,12 @@ def unduh_rekap(request):
                     naskah.peserta.institusi,
                 ]
             )
+            # kolom joined list of kolaborators
+            kolaborators = []
+            for k in naskah.kolaborators.all():
+                kolaborators.append(k.nama)
+            row.extend([", ".join(kolaborators)])
+
             try:
                 file_abstrak = str(os.path.basename(naskah.file_abstrak.name))
             except:
