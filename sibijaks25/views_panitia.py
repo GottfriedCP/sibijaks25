@@ -258,7 +258,8 @@ def unduh_rekap(request):
                     ]
                 )
 
-            if naskah.status_naskah != 666 and selesai_semua:
+            # if naskah.status_naskah != 666 and selesai_semua:
+            if naskah.status_naskah != 666:
                 try:
                     nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
                 except InvalidOperation as e:
