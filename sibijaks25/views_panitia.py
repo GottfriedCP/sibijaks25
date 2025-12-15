@@ -239,10 +239,12 @@ def unduh_rekap(request):
             )
             # Reviewer Konsep (data), di-append ke row terakhiran
             total_nilai = 0
+            count_nilai = 0
             selesai_semua = True
             list_detail_penilaian = []
             for r in naskah.reviews2.all():
                 total_nilai += r.total3
+                count_nilai = count_nilai + 1 if r.total3 > 0 else count_nilai
                 rekomendasi = "Lanjut"
                 if r.total3 == 0:
                     selesai_semua = False
@@ -261,7 +263,8 @@ def unduh_rekap(request):
             # if naskah.status_naskah != 666 and selesai_semua:
             if naskah.status_naskah != 666:
                 try:
-                    nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
+                    # nilai_avg = Decimal(total_nilai) / Decimal(naskah.reviews2.count())
+                    nilai_avg = Decimal(total_nilai) / Decimal(count_nilai)
                 except InvalidOperation as e:
                     nilai_avg = Decimal(1)
                 nilai_avg = nilai_avg.quantize(Decimal("0.00"))
