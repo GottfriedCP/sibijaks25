@@ -71,7 +71,7 @@
                     <th>Tanggal</th>
                     <th>Judul</th>
                     <th>Jenis Naskah</th>
-                    <th>Status</th>
+                    <!-- <th>Status</th> -->
                     <th>Tindakan</th>
                 </tr>
             </thead>
@@ -82,16 +82,15 @@
                     <td>{{ naskah.date_created|date:"d-m-Y H:i" }}</td>
                     <td>{{ naskah.judul }}</td>
                     <td>{{ naskah.get_jenis_naskah_display }}</td>
+                    {% comment %}
                     <td>
-                        -
-                        {% comment %}
                         {% if naskah.status_naskah == 100 %}
                         <span class="badge text-bg-success">{{ status }}</span>
                         {% else %}
                         <span class="badge text-bg-danger">{{ status }}</span>
                         {% endif %}
-                        {% endcomment %}
                     </td>
+                    {% endcomment %}
                     <td>
                         <div class="d-flex flex-wrap gap-2">
                             <a class="btn btn-kemkes btn-sm" role="button" href="{% url 'sibijaks25:detail_naskah' naskah.id %}">Lihat</a>
